@@ -3,18 +3,20 @@ import {
   isCloudStorageConfigured,
   loadFinanceFromDb,
   saveFinanceToDb,
+  verifyIdToken,
 } from "@/lib/firebase-admin";
-import type { FinanceData } from "@/features/personal-finance/types";
+import type { FinanceData } from "@/features/personal-finance/core/domain/types";
 
-const ACCESS_KEY_HEADER = "authorization";
+async function getUidFromRequest(request: NextRequest): Promise<string | null> {
+  const header = request.headers.get("authorization");
+  const token = header?.startsWith("Bearer ") ? header.slice(7) : null;
+  if (!token) return null;
 
-function verifyAccess(request: NextRequest): boolean {
-  const expected = process.env.FINANCE_ACCESS_KEY;
-  if (!expected) return false;
-
-  const header = request.headers.get(ACCESS_KEY_HEADER);
-  const token = header?.startsWith("Bearer ") ? header.slice(7) : header;
-  return token === expected;
+  try {
+    return await verifyIdToken(token);
+  } catch {
+    return null;
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -25,12 +27,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  if (!verifyAccess(request)) {
+  const uid = await getUidFromRequest(request);
+  if (!uid) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
-    const data = await loadFinanceFromDb();
+    const data = await loadFinanceFromDb(uid);
     return NextResponse.json({ data });
   } catch (error) {
     console.error("Failed to load finance data:", error);
@@ -46,13 +49,14 @@ export async function PUT(request: NextRequest) {
     );
   }
 
-  if (!verifyAccess(request)) {
+  const uid = await getUidFromRequest(request);
+  if (!uid) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     const body = (await request.json()) as FinanceData;
-    await saveFinanceToDb(body as unknown as Record<string, unknown>);
+    await saveFinanceToDb(uid, body as unknown as Record<string, unknown>);
     return NextResponse.json({ ok: true, lastUpdated: body.lastUpdated });
   } catch (error) {
     console.error("Failed to save finance data:", error);

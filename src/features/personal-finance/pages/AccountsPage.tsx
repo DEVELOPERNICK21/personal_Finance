@@ -40,9 +40,9 @@ export function AccountsPage() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <p className="text-sm text-zinc-400">
+        <p className="text-sm text-muted">
           Total Accounts Value:{" "}
-          <span className="text-white font-medium">{formatCurrency(total)}</span>
+          <span className="text-foreground font-medium">{formatCurrency(total)}</span>
         </p>
         <Button
           onClick={() =>
@@ -61,7 +61,7 @@ export function AccountsPage() {
           <Card key={account.id} title={account.name || "New Account"} icon="💰">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
+                <label className="block text-[10px] font-medium tracking-wider text-muted uppercase">
                   Type
                 </label>
                 <select
@@ -76,7 +76,7 @@ export function AccountsPage() {
                       ),
                     }))
                   }
-                  className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-100"
+                  className="w-full rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground"
                 >
                   {ACCOUNT_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>

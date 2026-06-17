@@ -1,5 +1,7 @@
 rules_version = '2';
 
+// All reads/writes go through Next.js API routes (Firebase Admin SDK).
+// Per-user data lives at users/{uid}/finance — accessed server-side only.
 service cloud.firestore {
   match /databases/{database}/documents {
     // All reads/writes go through Next.js API routes (Firebase Admin SDK).

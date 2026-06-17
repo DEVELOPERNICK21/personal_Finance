@@ -46,7 +46,7 @@ export function DocumentsPage() {
 
       {data.documents.length === 0 ? (
         <Card title="Important Documents" icon="📄">
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-muted">
             No documents yet. Add links to PAN, Aadhaar, insurance policies,
             investment statements, property papers, or your will.
           </p>
@@ -69,7 +69,7 @@ export function DocumentsPage() {
                   }
                 />
                 <div className="space-y-1.5">
-                  <label className="block text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
+                  <label className="block text-[10px] font-medium tracking-wider text-muted uppercase">
                     Category
                   </label>
                   <select
@@ -84,7 +84,7 @@ export function DocumentsPage() {
                         ),
                       }))
                     }
-                    className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-100"
+                    className="w-full rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground"
                   >
                     {CATEGORIES.map((c) => (
                       <option key={c.value} value={c.value}>
@@ -123,7 +123,7 @@ export function DocumentsPage() {
                     href={doc.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-400 hover:underline"
+                    className="text-sm text-accent-info hover:underline"
                   >
                     Open document →
                   </a>

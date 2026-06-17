@@ -1,22 +1,20 @@
 /**
  * Personal Finance — pluggable Next.js feature module
- *
- * Copy `src/features/personal-finance/` into any Next.js App Router project
- * and mount via PersonalFinanceMount in a catch-all route.
  */
 
-// Mount component (primary integration point)
 export { PersonalFinanceMount } from "./PersonalFinanceMount";
 export type { PersonalFinanceMountProps } from "./PersonalFinanceMount";
 
-// Provider & hooks (for custom layouts)
-export { FinanceProvider, useFinance } from "./context/FinanceProvider";
+export { FinanceProvider, useFinance, DEFAULT_CONFIG } from "./presentation/providers/FinanceProvider";
+export type { SaveStatus } from "./presentation/providers/FinanceProvider";
 
-// Layout & navigation (for custom routing)
+export { AuthProvider, useAuth } from "./presentation/providers/AuthProvider";
+
 export { FinanceLayout } from "./components/layout/FinanceLayout";
 export { FinanceNav } from "./components/layout/FinanceNav";
+export { ThemeToggle } from "./presentation/components/ThemeToggle";
+export { LoginPage } from "./presentation/components/LoginPage";
 
-// Individual pages (for custom route wiring)
 export { DashboardPage } from "./pages/DashboardPage";
 export { AccountsPage } from "./pages/AccountsPage";
 export { InvestmentsPage } from "./pages/InvestmentsPage";
@@ -26,7 +24,6 @@ export { InsurancePage } from "./pages/InsurancePage";
 export { DocumentsPage } from "./pages/DocumentsPage";
 export { EmergencyPage } from "./pages/EmergencyPage";
 
-// Routes manifest
 export {
   FINANCE_ROUTES,
   resolveFinanceSlug,
@@ -34,10 +31,8 @@ export {
   type FinanceRouteSlug,
 } from "./routes";
 
-// Config
 export { createFinanceConfig, DEFAULT_CONFIG as FINANCE_DEFAULT_CONFIG } from "./config";
 
-// Types
 export type {
   FinanceData,
   FinanceConfig,
@@ -53,7 +48,6 @@ export type {
   FinalInstructions,
 } from "./types";
 
-// Utilities
 export { calculateMetrics } from "./lib/calculations";
 export { formatCurrency, formatCompactCurrency, formatPercent, formatDate } from "./lib/format";
 export {

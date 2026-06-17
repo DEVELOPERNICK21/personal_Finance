@@ -23,7 +23,7 @@ export function DashboardPage() {
       <div className="space-y-6">
         <Card title="SOS Emergency View" icon="🚨">
           <div className="space-y-4">
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted">
               Critical information for your family in an emergency.
             </p>
             <Field label="Salary Account" value={data.instructions.salaryAccount} readOnly />
@@ -62,25 +62,25 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-sm text-zinc-400">
+      <div className="rounded-xl border border-border bg-surface/50 px-4 py-3 text-sm text-muted">
         Last Updated:{" "}
-        <span className="text-zinc-200">{formatDate(data.lastUpdated)}</span>
+        <span className="text-foreground">{formatDate(data.lastUpdated)}</span>
         <span className="mx-3">·</span>
         Net Worth:{" "}
-        <span className="text-white">{formatCompactCurrency(metrics.netWorth)}</span>
+        <span className="text-foreground">{formatCompactCurrency(metrics.netWorth)}</span>
         <span className="mx-3">·</span>
         Emergency Fund:{" "}
-        <span className="text-emerald-400">
+        <span className="text-accent-success">
           {formatPercent(metrics.emergencyFundProgress)}
         </span>
         <span className="mx-3">·</span>
         Savings Rate:{" "}
-        <span className="text-emerald-400">{formatPercent(metrics.savingsRate)}</span>
+        <span className="text-accent-success">{formatPercent(metrics.savingsRate)}</span>
         {metrics.nextInsuranceRenewal && (
           <>
             <span className="mx-3">·</span>
             Next Renewal:{" "}
-            <span className="text-orange-400">
+            <span className="text-accent-warning">
               {formatShortDate(metrics.nextInsuranceRenewal.date)}
             </span>
           </>
@@ -89,7 +89,7 @@ export function DashboardPage() {
           <>
             <span className="mx-3">·</span>
             Next SIP:{" "}
-            <span className="text-blue-400">{formatShortDate(metrics.nextSipDate)}</span>
+            <span className="text-accent-info">{formatShortDate(metrics.nextSipDate)}</span>
           </>
         )}
       </div>
@@ -219,7 +219,7 @@ export function DashboardPage() {
             <div className="space-y-4">
               {termPolicy && (
                 <div>
-                  <h3 className="mb-3 text-sm font-medium text-blue-400">
+                  <h3 className="mb-3 text-sm font-medium text-accent-info">
                     {termPolicy.name}
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -230,7 +230,7 @@ export function DashboardPage() {
               )}
               {healthPolicy && (
                 <div>
-                  <h3 className="mb-3 text-sm font-medium text-emerald-400">
+                  <h3 className="mb-3 text-sm font-medium text-accent-success">
                     {healthPolicy.name}
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2">
@@ -284,7 +284,7 @@ export function DashboardPage() {
               </div>
 
               <div>
-                <p className="mb-2 text-[10px] tracking-wider text-zinc-500 uppercase">
+                <p className="mb-2 text-[10px] tracking-wider text-muted uppercase">
                   Salary Allocation Mix
                 </p>
                 <AllocationBar
@@ -292,28 +292,28 @@ export function DashboardPage() {
                     {
                       label: "Fixed",
                       percent: metrics.salaryAllocation.fixed,
-                      color: "bg-red-500",
+                      color: "bg-accent-danger",
                     },
                     {
                       label: "Wants",
                       percent: metrics.salaryAllocation.wants,
-                      color: "bg-orange-500",
+                      color: "bg-accent-warning",
                     },
                     {
                       label: "Saved",
                       percent: metrics.salaryAllocation.saved,
-                      color: "bg-emerald-500",
+                      color: "bg-accent-success",
                     },
                   ]}
                 />
               </div>
 
               <div>
-                <p className="mb-2 text-[10px] tracking-wider text-zinc-500 uppercase">
+                <p className="mb-2 text-[10px] tracking-wider text-muted uppercase">
                   Emergency Protection Pool
                 </p>
                 <SimpleProgress percent={metrics.emergencyFundProgress} />
-                <p className="mt-2 text-xs text-zinc-400">
+                <p className="mt-2 text-xs text-muted">
                   {metrics.emergencyFundDeficit > 0
                     ? `Deficit of ${formatCurrency(metrics.emergencyFundDeficit)}. At your present tracking pace, you are roughly ${metrics.emergencyFundMonthsToTarget} months away from total security.`
                     : "Emergency fund target reached. Great work!"}
@@ -335,7 +335,7 @@ export function DashboardPage() {
 
           <Card title="Month-End Review Drill" icon="📅">
             <div className="space-y-4">
-              <ul className="space-y-2 text-sm text-zinc-300">
+              <ul className="space-y-2 text-sm text-foreground">
                 {[
                   { key: "verifyBankLogs", label: "Verify real-time bank asset logs" },
                   { key: "confirmSipClearance", label: "Confirm automated SIP clearance" },
@@ -355,7 +355,7 @@ export function DashboardPage() {
                           },
                         }))
                       }
-                      className="rounded border-zinc-600 bg-zinc-900"
+                      className="rounded border-border bg-surface"
                     />
                     {item.label}
                   </li>

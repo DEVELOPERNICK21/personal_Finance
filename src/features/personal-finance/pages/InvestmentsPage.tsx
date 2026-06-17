@@ -36,10 +36,10 @@ export function InvestmentsPage() {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3">
-        <p className="text-sm text-zinc-400">
+      <div className="rounded-xl border border-border bg-surface/50 px-4 py-3">
+        <p className="text-sm text-muted">
           Total Investment Value:{" "}
-          <span className="text-emerald-400 font-medium">
+          <span className="text-accent-success font-medium">
             {formatCurrency(metrics.investmentValue)}
           </span>
         </p>
@@ -63,7 +63,7 @@ export function InvestmentsPage() {
           <Card key={inv.id} title={inv.name || "New Investment"} icon="📈">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-medium tracking-wider text-zinc-500 uppercase">
+                <label className="block text-[10px] font-medium tracking-wider text-muted uppercase">
                   Type
                 </label>
                 <select
@@ -78,7 +78,7 @@ export function InvestmentsPage() {
                       ),
                     }))
                   }
-                  className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-3 py-2.5 text-sm text-zinc-100"
+                  className="w-full rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground"
                 >
                   {INVESTMENT_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>
@@ -178,10 +178,10 @@ export function InvestmentsPage() {
               return (
                 <div key={inv.id}>
                   <div className="mb-1 flex justify-between text-sm">
-                    <span className="text-zinc-300">{inv.name || inv.type}</span>
-                    <span className="text-zinc-500">{Math.round(share)}%</span>
+                    <span className="text-foreground">{inv.name || inv.type}</span>
+                    <span className="text-muted">{Math.round(share)}%</span>
                   </div>
-                  <SimpleProgress percent={share} color="bg-blue-500" />
+                  <SimpleProgress percent={share} color="bg-accent-info" />
                 </div>
               );
             })}

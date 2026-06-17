@@ -111,20 +111,20 @@ export function MonthlyMoneyPage() {
       </Card>
 
       <Card title="Monthly Formula" icon="🧮">
-        <div className="rounded-lg border border-zinc-800 bg-zinc-950 p-4 font-mono text-sm text-zinc-300">
+        <div className="rounded-lg border border-border bg-surface-input p-4 font-mono text-sm text-foreground">
           <p>Income − Expenses − Investments = Remaining</p>
-          <p className="mt-2 text-white">
+          <p className="mt-2 text-foreground">
             {formatCurrency(monthly.income)} − {formatCurrency(metrics.monthlyExpenses)} −{" "}
             {formatCurrency(metrics.monthlySavings)} ={" "}
             <span
               className={
-                metrics.monthlyRemaining >= 0 ? "text-emerald-400" : "text-orange-400"
+                metrics.monthlyRemaining >= 0 ? "text-accent-success" : "text-accent-warning"
               }
             >
               {formatCurrency(metrics.monthlyRemaining)}
             </span>
           </p>
-          <p className="mt-2 text-zinc-500">
+          <p className="mt-2 text-muted">
             Savings rate: {formatPercent(metrics.savingsRate)}
           </p>
         </div>

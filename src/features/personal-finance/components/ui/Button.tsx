@@ -13,8 +13,8 @@ export function Button({
 }: ButtonProps) {
   const styles =
     variant === "primary"
-      ? "bg-white text-black hover:bg-zinc-200"
-      : "border border-zinc-600 bg-transparent text-zinc-100 hover:bg-zinc-800";
+      ? "bg-[var(--btn-primary-bg)] text-[var(--btn-primary-fg)] hover:opacity-90"
+      : "border border-[var(--btn-secondary-border)] bg-transparent text-foreground hover:bg-surface";
 
   return (
     <button

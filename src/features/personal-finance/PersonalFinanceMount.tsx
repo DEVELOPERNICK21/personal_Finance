@@ -1,12 +1,11 @@
 "use client";
 
 import type { ComponentType } from "react";
-import { useEffect, useState } from "react";
-import { AuthGate } from "./components/AuthGate";
 import { FinanceLayout } from "./components/layout/FinanceLayout";
 import { SaveStatusBar } from "./components/layout/SaveStatusBar";
-import { FinanceProvider, useFinance } from "./context/FinanceProvider";
-import { getStoredAccessKey } from "./lib/remote-storage";
+import { FinanceProvider, useFinance } from "./presentation/providers/FinanceProvider";
+import { AuthProvider, useAuth } from "./presentation/providers/AuthProvider";
+import { LoginPage } from "./presentation/components/LoginPage";
 import { AccountsPage } from "./pages/AccountsPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
@@ -36,28 +35,26 @@ export interface PersonalFinanceMountProps {
 }
 
 function FinanceShell({ slug }: { slug?: string[] }) {
-  const { saveStatus, isAuthenticated, usesCloudStorage, retryCloudSync } = useFinance();
-  const [cloudAvailable, setCloudAvailable] = useState<boolean | null>(null);
+  const { saveStatus, usesCloudStorage, retryCloudSync } = useFinance();
+  const { status: authStatus } = useAuth();
   const resolvedSlug = resolveFinanceSlug(slug);
   const Page = PAGE_MAP[resolvedSlug] ?? DashboardPage;
 
-  useEffect(() => {
-    void fetch("/api/finance/status")
-      .then((r) => r.json())
-      .then((json: { cloudConfigured: boolean }) => setCloudAvailable(json.cloudConfigured))
-      .catch(() => setCloudAvailable(false));
-  }, []);
-
-  const needsAuth =
-    cloudAvailable === true && !isAuthenticated && !getStoredAccessKey();
-
-  if (needsAuth) {
-    return <AuthGate onAuthenticated={() => retryCloudSync()} />;
+  if (authStatus === "loading") {
+    return (
+      <div className="flex min-h-[40vh] items-center justify-center text-sm text-muted">
+        Loading...
+      </div>
+    );
   }
 
-  if (saveStatus === "loading" || cloudAvailable === null) {
+  if (authStatus === "unauthenticated") {
+    return <LoginPage />;
+  }
+
+  if (saveStatus === "loading") {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-sm text-zinc-400">
+      <div className="flex min-h-[40vh] items-center justify-center text-sm text-muted">
         Loading your finance data...
       </div>
     );
@@ -81,10 +78,12 @@ export function PersonalFinanceMount({
   initialData,
 }: PersonalFinanceMountProps) {
   return (
-    <FinanceProvider config={config} initialData={initialData}>
-      <FinanceLayout>
-        <FinanceShell slug={slug} />
-      </FinanceLayout>
-    </FinanceProvider>
+    <AuthProvider>
+      <FinanceProvider config={config} initialData={initialData}>
+        <FinanceLayout>
+          <FinanceShell slug={slug} />
+        </FinanceLayout>
+      </FinanceProvider>
+    </AuthProvider>
   );
 }

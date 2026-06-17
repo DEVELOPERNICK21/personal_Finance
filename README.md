@@ -11,7 +11,8 @@ A modular personal finance dashboard for Next.js that answers the essential mone
 - **Goals** — emergency fund, vacation, car, house, retirement
 - **Insurance** — term, health, vehicle policies with renewal tracking
 - **Documents** — PAN, Aadhaar, policies, statements, will
-- **Emergency Info** — final instructions, contacts, SOS view, JSON export
+- **Firebase Auth** — email/password sign-in, sign-up, password reset
+- **Light / dark theme** — toggle in header, persisted preference
 
 Data auto-saves to the cloud (Firebase Firestore) when deployed. Local browser cache is kept as a backup.
 
@@ -29,13 +30,24 @@ Your data is stored in **Firebase Firestore** and survives across devices, brows
    npx firebase-tools firestore:rules:set firestore.rules
    ```
 
-### 2. Get a service account key
+### 2. Enable Firebase Authentication
 
+1. Firebase Console → **Authentication** → Sign-in method
+2. Enable **Email/Password**
+3. Add authorized domains: `localhost` and your Vercel domain
+
+### 3. Get credentials
+
+**Admin SDK** (server):
 1. Firebase Console → Project Settings → Service Accounts
 2. Click **Generate new private key**
 3. Copy `project_id`, `client_email`, and `private_key` from the JSON file
 
-### 3. Set environment variables
+**Web app** (client):
+1. Project Settings → General → Your apps → Add Web app
+2. Copy `apiKey`, `authDomain`, `projectId`, `appId`
+
+### 4. Set environment variables
 
 Copy `.env.example` to `.env.local` for local dev:
 
@@ -43,19 +55,11 @@ Copy `.env.example` to `.env.local` for local dev:
 cp .env.example .env.local
 ```
 
-Fill in:
+Fill in all variables from `.env.example` (admin + `NEXT_PUBLIC_FIREBASE_*` client vars).
 
-```env
-FIREBASE_PROJECT_ID=your-project-id
-FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your-project-id.iam.gserviceaccount.com
-FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
-FINANCE_ACCESS_KEY=choose-a-long-random-secret-key
-```
+For **Vercel deployment**, add the same variables in Project Settings → Environment Variables.
 
-For **Vercel deployment**, add the same variables in:
-Project Settings → Environment Variables
-
-### 4. Deploy to Vercel
+### 5. Deploy to Vercel
 
 ```bash
 npx vercel
@@ -63,11 +67,11 @@ npx vercel
 
 Or connect your GitHub repo at [vercel.com](https://vercel.com).
 
-### 5. Unlock your dashboard
+### 6. Sign in
 
 1. Open your deployed URL → `/finance`
-2. Enter your `FINANCE_ACCESS_KEY` when prompted
-3. All edits auto-save to Firestore (you'll see **"All changes saved · synced to cloud"**)
+2. Create an account or sign in with email/password
+3. All edits auto-save to Firestore per user (`users/{uid}/finance`)
 
 ### How saving works
 
@@ -183,17 +187,16 @@ export default function CustomFinancePage() {
 
 ```
 src/features/personal-finance/
-  index.ts                  # Public API — import from here
-  PersonalFinanceMount.tsx  # Single-mount integration component
-  config.ts                 # basePath, currency, locale
-  routes.ts                 # Route manifest
-  types/                    # TypeScript interfaces
-  lib/                      # calculations, format, storage
-  context/                  # FinanceProvider + useFinance hook
-  components/
-    ui/                     # Card, Field, MetricCard, ProgressBar
-    layout/                 # FinanceLayout, FinanceNav
+  core/
+    domain/                 # Types, calculations, defaults (pure)
+    application/            # finance-service use-cases
+  infrastructure/           # auth-repository, finance-repository
+  presentation/
+    providers/              # AuthProvider, FinanceProvider
+    components/             # LoginPage, ThemeToggle
+  components/               # UI primitives, layout
   pages/                    # 8 page components
+  index.ts                  # Public API
 ```
 
 ## Tech Stack

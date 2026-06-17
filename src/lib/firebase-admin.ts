@@ -1,7 +1,8 @@
 import { cert, getApps, initializeApp, type App } from "firebase-admin/app";
+import { getAuth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
 
-const FINANCE_DOC_PATH = "personalFinance/main";
+const LEGACY_DOC_PATH = "personalFinance/main";
 
 let app: App | undefined;
 let db: Firestore | undefined;
@@ -33,14 +34,35 @@ export function getAdminDb(): Firestore {
   return db;
 }
 
-export async function loadFinanceFromDb(): Promise<Record<string, unknown> | null> {
-  const snapshot = await getAdminDb().doc(FINANCE_DOC_PATH).get();
-  if (!snapshot.exists) return null;
-  return snapshot.data() ?? null;
+function userFinancePath(uid: string): string {
+  // Firestore doc paths must be collection/document pairs — store finance data on the user doc
+  return `users/${uid}`;
 }
 
-export async function saveFinanceToDb(data: Record<string, unknown>): Promise<void> {
-  await getAdminDb().doc(FINANCE_DOC_PATH).set(data, { merge: false });
+export async function verifyIdToken(token: string): Promise<string> {
+  const decoded = await getAuth(getFirebaseApp()).verifyIdToken(token);
+  return decoded.uid;
+}
+
+export async function loadFinanceFromDb(uid: string): Promise<Record<string, unknown> | null> {
+  const userDoc = await getAdminDb().doc(userFinancePath(uid)).get();
+  if (userDoc.exists) return userDoc.data() ?? null;
+
+  const legacy = await getAdminDb().doc(LEGACY_DOC_PATH).get();
+  if (!legacy.exists) return null;
+
+  const legacyData = legacy.data() ?? null;
+  if (legacyData) {
+    await getAdminDb().doc(userFinancePath(uid)).set(legacyData, { merge: false });
+  }
+  return legacyData;
+}
+
+export async function saveFinanceToDb(
+  uid: string,
+  data: Record<string, unknown>
+): Promise<void> {
+  await getAdminDb().doc(userFinancePath(uid)).set(data, { merge: false });
 }
 
 export function isCloudStorageConfigured(): boolean {

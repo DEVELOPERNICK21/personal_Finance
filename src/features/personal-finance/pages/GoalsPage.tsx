@@ -81,11 +81,11 @@ export function GoalsPage() {
                 </div>
                 <div>
                   <div className="mb-1 flex justify-between text-sm">
-                    <span className="text-zinc-400">Progress</span>
-                    <span className="text-emerald-400">{formatPercent(progress)}</span>
+                    <span className="text-muted">Progress</span>
+                    <span className="text-accent-success">{formatPercent(progress)}</span>
                   </div>
                   <SimpleProgress percent={progress} />
-                  <p className="mt-1 text-xs text-zinc-500">
+                  <p className="mt-1 text-xs text-muted">
                     {formatCurrency(goal.current)} of {formatCurrency(goal.target)}
                   </p>
                 </div>

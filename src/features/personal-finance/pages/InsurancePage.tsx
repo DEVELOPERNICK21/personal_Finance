@@ -8,9 +8,9 @@ import { formatCurrency } from "../lib/format";
 import type { InsurancePolicy } from "../types";
 
 const TYPE_COLORS = {
-  term: "text-blue-400",
-  health: "text-emerald-400",
-  vehicle: "text-orange-400",
+  term: "text-accent-info",
+  health: "text-accent-success",
+  vehicle: "text-accent-warning",
 };
 
 function newPolicy(type: InsurancePolicy["type"]): InsurancePolicy {
@@ -45,7 +45,7 @@ export function InsurancePage() {
       <Card title="Protection & Insurance Matrix" icon="🛡️">
         <div className="space-y-6">
           {data.insurance.map((policy) => (
-            <div key={policy.id} className="border-b border-zinc-800 pb-6 last:border-0 last:pb-0">
+            <div key={policy.id} className="border-b border-border pb-6 last:border-0 last:pb-0">
               <h3 className={`mb-4 text-sm font-medium ${TYPE_COLORS[policy.type]}`}>
                 {policy.name || `${policy.type} insurance`}
               </h3>
@@ -115,7 +115,7 @@ export function InsurancePage() {
                   }
                 />
                 <div className="flex items-end">
-                  <p className="text-sm text-zinc-500">
+                  <p className="text-sm text-muted">
                     Coverage: {formatCurrency(policy.coverage)}
                   </p>
                 </div>

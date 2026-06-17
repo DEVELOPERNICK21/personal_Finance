@@ -102,7 +102,7 @@ export function EmergencyPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {contacts.map((contact) => (
-            <div key={contact.id} className="space-y-3 rounded-lg border border-zinc-800 p-4">
+            <div key={contact.id} className="space-y-3 rounded-lg border border-border p-4">
               <Field
                 label="Role"
                 value={contact.role}
@@ -158,7 +158,7 @@ export function EmergencyPage() {
       </Card>
 
       <Card title="Data Backup" icon="💾">
-        <p className="mb-4 text-sm text-zinc-400">
+        <p className="mb-4 text-sm text-muted">
           Export your finance data as JSON so your family can access everything in
           one file.
         </p>

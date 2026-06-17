@@ -1,6 +1,6 @@
 "use client";
 
-import type { SaveStatus } from "../../context/FinanceProvider";
+import type { SaveStatus } from "../../presentation/providers/FinanceProvider";
 import { Button } from "../ui/Button";
 
 interface SaveStatusBarProps {
@@ -21,22 +21,22 @@ const STATUS_LABELS: Record<SaveStatus, string> = {
 export function SaveStatusBar({ status, usesCloudStorage, onRetry }: SaveStatusBarProps) {
   const color =
     status === "saved"
-      ? "text-emerald-400"
+      ? "text-accent-success"
       : status === "error"
-        ? "text-red-400"
+        ? "text-accent-danger"
         : status === "saving"
-          ? "text-yellow-400"
-          : "text-zinc-500";
+          ? "text-accent-warning"
+          : "text-muted";
 
   return (
-    <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-zinc-800 bg-zinc-900/50 px-3 py-2 text-xs">
+    <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-border bg-surface/50 px-3 py-2 text-xs">
       <div className="flex items-center gap-2">
         <span className={`font-medium ${color}`}>{STATUS_LABELS[status]}</span>
         {usesCloudStorage && status === "saved" && (
-          <span className="text-zinc-600">· synced to cloud</span>
+          <span className="text-muted">· synced to cloud</span>
         )}
         {!usesCloudStorage && (
-          <span className="text-zinc-600">· configure Firebase env vars for cloud save</span>
+          <span className="text-muted">· configure Firebase env vars for cloud save</span>
         )}
       </div>
       {status === "error" && (
