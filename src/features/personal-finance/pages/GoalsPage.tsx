@@ -54,26 +54,30 @@ export function GoalsPage() {
                 <div className="grid gap-4 sm:grid-cols-2">
                   <Field
                     label="Target (₹)"
-                    value={goal.target}
+                    value={goal.target ?? 0}
                     type="number"
                     onChange={(v) =>
                       updateData((d) => ({
                         ...d,
                         goals: d.goals.map((g) =>
-                          g.id === goal.id ? { ...g, target: Number(v) || 0 } : g
+                          g.id === goal.id
+                            ? { ...g, target: v === "" ? 0 : Number(v) || 0 }
+                            : g
                         ),
                       }))
                     }
                   />
                   <Field
                     label="Current Amount (₹)"
-                    value={goal.current}
+                    value={goal.current ?? 0}
                     type="number"
                     onChange={(v) =>
                       updateData((d) => ({
                         ...d,
                         goals: d.goals.map((g) =>
-                          g.id === goal.id ? { ...g, current: Number(v) || 0 } : g
+                          g.id === goal.id
+                            ? { ...g, current: v === "" ? 0 : Number(v) || 0 }
+                            : g
                         ),
                       }))
                     }

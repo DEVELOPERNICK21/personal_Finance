@@ -125,14 +125,14 @@ export function InvestmentsPage() {
               />
               <Field
                 label="Current Value (₹)"
-                value={inv.currentValue}
+                value={inv.currentValue ?? 0}
                 type="number"
                 onChange={(v) =>
                   updateData((d) => ({
                     ...d,
                     accounts: d.accounts.map((a) =>
                       a.id === inv.id
-                        ? { ...a, currentValue: Number(v) || 0 }
+                        ? { ...a, currentValue: v === "" ? 0 : Number(v) || 0 }
                         : a
                     ),
                   }))

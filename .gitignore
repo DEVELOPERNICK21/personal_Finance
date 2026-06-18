@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Serwist (webpack legacy output; turbopack uses route handler)
+public/sw*
+public/swe-worker*

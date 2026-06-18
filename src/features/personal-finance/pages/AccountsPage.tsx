@@ -144,14 +144,14 @@ export function AccountsPage() {
               />
               <Field
                 label="Current value (₹)"
-                value={account.currentValue}
+                value={account.currentValue ?? 0}
                 type="number"
                 onChange={(v) =>
                   updateData((d) => ({
                     ...d,
                     accounts: d.accounts.map((a) =>
                       a.id === account.id
-                        ? { ...a, currentValue: Number(v) || 0 }
+                        ? { ...a, currentValue: v === "" ? 0 : Number(v) || 0 }
                         : a
                     ),
                   }))
@@ -253,13 +253,15 @@ export function AccountsPage() {
                   />
                   <Field
                     label="Amount (₹)"
-                    value={loan.amount}
+                    value={loan.amount ?? 0}
                     type="number"
                     onChange={(v) =>
                       updateData((d) => ({
                         ...d,
                         receivables: (d.receivables ?? []).map((r) =>
-                          r.id === loan.id ? { ...r, amount: Number(v) || 0 } : r
+                          r.id === loan.id
+                            ? { ...r, amount: v === "" ? 0 : Number(v) || 0 }
+                            : r
                         ),
                       }))
                     }

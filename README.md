@@ -13,8 +13,19 @@ A modular personal finance dashboard for Next.js that answers the essential mone
 - **Documents** — PAN, Aadhaar, policies, statements, will
 - **Firebase Auth** — email/password sign-in, sign-up, password reset
 - **Light / dark theme** — toggle in header, persisted preference
+- **PWA** — installable on phone/desktop, offline app shell, cached assets
 
 Data auto-saves to the cloud (Firebase Firestore) when deployed. Local browser cache is kept as a backup.
+
+## Install as an app (PWA)
+
+After deploying (or running `yarn build && yarn start` locally):
+
+1. Open `/finance` in Chrome, Edge, or Safari
+2. Use **Install app** / **Add to Home Screen** from the browser menu
+3. The app opens standalone at `/finance` with a wallet icon
+
+The service worker caches the app shell and static assets. Finance data still syncs via Firebase when online; if you go offline, you'll see an offline page until connectivity returns.
 
 ## Deploy with Permanent Cloud Save
 
