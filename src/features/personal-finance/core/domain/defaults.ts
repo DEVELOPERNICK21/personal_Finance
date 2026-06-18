@@ -73,6 +73,7 @@ export const DEFAULT_FINANCE_DATA: FinanceData = {
     { id: "3", role: "Primary Bank Manager", name: "", contact: "" },
     { id: "4", role: "Insurance Advisor Node", name: "", contact: "" },
   ],
+  receivables: [],
   instructions: {
     salaryAccount: "Kotak Savings Account",
     investmentLocations: "EPF via employer, SIPs via Groww",

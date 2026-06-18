@@ -43,6 +43,7 @@ export type {
   InsurancePolicy,
   Document,
   EmergencyContact,
+  MoneyReceivable,
   MonthlyMoney,
   AssetInventory,
   FinalInstructions,

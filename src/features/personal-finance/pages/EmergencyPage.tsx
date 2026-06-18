@@ -102,7 +102,7 @@ export function EmergencyPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {contacts.map((contact) => (
-            <div key={contact.id} className="space-y-3 rounded-lg border border-border p-4">
+            <div key={contact.id} className="space-y-3 rounded-2xl border border-border bg-[var(--finance-subtle)]/40 p-4">
               <Field
                 label="Role"
                 value={contact.role}

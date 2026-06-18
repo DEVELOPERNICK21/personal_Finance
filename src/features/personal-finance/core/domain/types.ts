@@ -70,6 +70,16 @@ export interface AssetInventory {
   uanNumber: string;
 }
 
+export interface MoneyReceivable {
+  id: string;
+  borrowerName: string;
+  amount: number;
+  lentDate: string;
+  expectedReturnDate: string;
+  notes: string;
+  repaid: boolean;
+}
+
 export interface FinalInstructions {
   salaryAccount: string;
   investmentLocations: string;
@@ -87,6 +97,7 @@ export interface FinanceData {
   insurance: InsurancePolicy[];
   documents: Document[];
   contacts: EmergencyContact[];
+  receivables: MoneyReceivable[];
   instructions: FinalInstructions;
   monthEndChecklist: Record<string, boolean>;
   sosMode: boolean;
@@ -119,4 +130,6 @@ export interface FinanceMetrics {
   };
   nextInsuranceRenewal: { name: string; date: string } | null;
   nextSipDate: string | null;
+  totalReceivables: number;
+  nextReceivableReturn: { borrowerName: string; date: string; amount: number } | null;
 }

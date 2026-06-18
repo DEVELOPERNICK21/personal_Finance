@@ -14,7 +14,10 @@ export function calculateMetrics(
     .filter((a) => a.type === "bank")
     .reduce((sum, a) => sum + a.currentValue, 0);
 
-  const netWorth = bankValue + investmentValue + cashAvailable;
+  const pendingReceivables = (data.receivables ?? []).filter((r) => !r.repaid);
+  const totalReceivables = pendingReceivables.reduce((sum, r) => sum + r.amount, 0);
+
+  const netWorth = bankValue + investmentValue + cashAvailable + totalReceivables;
 
   const monthlyIncome = data.monthly.income;
   const monthlyExpenses =
@@ -63,6 +66,15 @@ export function calculateMetrics(
   const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, 5);
   const nextSipDate = nextMonth.toISOString().split("T")[0];
 
+  const nextReceivableReturn = pendingReceivables
+    .filter((r) => r.expectedReturnDate)
+    .map((r) => ({
+      borrowerName: r.borrowerName,
+      date: r.expectedReturnDate,
+      amount: r.amount,
+    }))
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())[0] ?? null;
+
   return {
     netWorth,
     cashAvailable,
@@ -79,5 +91,7 @@ export function calculateMetrics(
     salaryAllocation,
     nextInsuranceRenewal,
     nextSipDate,
+    totalReceivables,
+    nextReceivableReturn,
   };
 }

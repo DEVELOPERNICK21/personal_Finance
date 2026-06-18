@@ -1,3 +1,6 @@
+export const financeInputClassName =
+  "w-full rounded-xl border border-[var(--finance-input-border)] bg-[var(--finance-input-bg)] px-4 py-2.5 text-sm text-foreground placeholder:text-muted/50 focus:border-[var(--finance-input-focus)] focus:ring-2 focus:ring-[var(--finance-input-ring)] focus:outline-none transition-colors";
+
 interface FieldProps {
   label: string;
   value: string | number;
@@ -17,11 +20,9 @@ export function Field({
 }: FieldProps) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-[10px] font-medium tracking-wider text-muted uppercase">
-        {label}
-      </label>
+      <label className="block text-sm font-medium text-muted">{label}</label>
       {readOnly || !onChange ? (
-        <div className="rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground">
+        <div className={`${financeInputClassName} bg-[var(--finance-subtle)]`}>
           {value || placeholder || "—"}
         </div>
       ) : (
@@ -30,7 +31,7 @@ export function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground placeholder:text-muted/60 focus:border-muted focus:outline-none"
+          className={financeInputClassName}
         />
       )}
     </div>

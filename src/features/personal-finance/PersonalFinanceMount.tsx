@@ -2,7 +2,6 @@
 
 import type { ComponentType } from "react";
 import { FinanceLayout } from "./components/layout/FinanceLayout";
-import { SaveStatusBar } from "./components/layout/SaveStatusBar";
 import { FinanceProvider, useFinance } from "./presentation/providers/FinanceProvider";
 import { AuthProvider, useAuth } from "./presentation/providers/AuthProvider";
 import { LoginPage } from "./presentation/components/LoginPage";
@@ -35,22 +34,9 @@ export interface PersonalFinanceMountProps {
 }
 
 function FinanceShell({ slug }: { slug?: string[] }) {
-  const { saveStatus, usesCloudStorage, retryCloudSync } = useFinance();
-  const { status: authStatus } = useAuth();
+  const { saveStatus } = useFinance();
   const resolvedSlug = resolveFinanceSlug(slug);
   const Page = PAGE_MAP[resolvedSlug] ?? DashboardPage;
-
-  if (authStatus === "loading") {
-    return (
-      <div className="flex min-h-[40vh] items-center justify-center text-sm text-muted">
-        Loading...
-      </div>
-    );
-  }
-
-  if (authStatus === "unauthenticated") {
-    return <LoginPage />;
-  }
 
   if (saveStatus === "loading") {
     return (
@@ -62,13 +48,36 @@ function FinanceShell({ slug }: { slug?: string[] }) {
 
   return (
     <>
-      <SaveStatusBar
-        status={saveStatus}
-        usesCloudStorage={usesCloudStorage}
-        onRetry={retryCloudSync}
-      />
       <Page />
     </>
+  );
+}
+
+function AuthGate({
+  slug,
+  config,
+  initialData,
+}: PersonalFinanceMountProps) {
+  const { status: authStatus } = useAuth();
+
+  if (authStatus === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-sm text-white/60">
+        Loading...
+      </div>
+    );
+  }
+
+  if (authStatus === "unauthenticated") {
+    return <LoginPage />;
+  }
+
+  return (
+    <FinanceProvider config={config} initialData={initialData}>
+      <FinanceLayout>
+        <FinanceShell slug={slug} />
+      </FinanceLayout>
+    </FinanceProvider>
   );
 }
 
@@ -79,11 +88,7 @@ export function PersonalFinanceMount({
 }: PersonalFinanceMountProps) {
   return (
     <AuthProvider>
-      <FinanceProvider config={config} initialData={initialData}>
-        <FinanceLayout>
-          <FinanceShell slug={slug} />
-        </FinanceLayout>
-      </FinanceProvider>
+      <AuthGate slug={slug} config={config} initialData={initialData} />
     </AuthProvider>
   );
 }

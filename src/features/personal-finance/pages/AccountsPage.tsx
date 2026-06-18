@@ -2,10 +2,10 @@
 
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
-import { Field } from "../components/ui/Field";
+import { Field, financeInputClassName } from "../components/ui/Field";
 import { useFinance } from "../context/FinanceProvider";
 import { formatCurrency } from "../lib/format";
-import type { Account, AccountType } from "../types";
+import type { Account, AccountType, MoneyReceivable } from "../types";
 
 const ACCOUNT_TYPES: { value: AccountType; label: string }[] = [
   { value: "bank", label: "Bank Account" },
@@ -29,21 +29,43 @@ function newAccount(): Account {
   };
 }
 
+function newReceivable(): MoneyReceivable {
+  return {
+    id: crypto.randomUUID(),
+    borrowerName: "",
+    amount: 0,
+    lentDate: new Date().toISOString().split("T")[0],
+    expectedReturnDate: "",
+    notes: "",
+    repaid: false,
+  };
+}
+
 export function AccountsPage() {
-  const { data, updateData } = useFinance();
+  const { data, metrics, updateData } = useFinance();
   const accounts = data.accounts.filter((a) =>
     ["bank", "epf", "ppf", "nps", "fd", "gold", "real_estate"].includes(a.type)
   );
+  const receivables = data.receivables ?? [];
+  const pendingReceivables = receivables.filter((r) => !r.repaid);
 
   const total = accounts.reduce((sum, a) => sum + a.currentValue, 0);
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted">
-          Total Accounts Value:{" "}
-          <span className="text-foreground font-medium">{formatCurrency(total)}</span>
-        </p>
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-4 text-sm text-muted">
+          <p>
+            Accounts:{" "}
+            <span className="font-medium text-foreground">{formatCurrency(total)}</span>
+          </p>
+          <p>
+            Owed to you:{" "}
+            <span className="font-medium text-foreground">
+              {formatCurrency(metrics.totalReceivables)}
+            </span>
+          </p>
+        </div>
         <Button
           onClick={() =>
             updateData((d) => ({
@@ -61,9 +83,7 @@ export function AccountsPage() {
           <Card key={account.id} title={account.name || "New Account"} icon="💰">
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               <div className="space-y-1.5">
-                <label className="block text-[10px] font-medium tracking-wider text-muted uppercase">
-                  Type
-                </label>
+                <label className="block text-sm font-medium text-muted">Type</label>
                 <select
                   value={account.type}
                   onChange={(e) =>
@@ -76,7 +96,7 @@ export function AccountsPage() {
                       ),
                     }))
                   }
-                  className="w-full rounded-lg border border-border bg-surface-input px-3 py-2.5 text-sm text-foreground"
+                  className={financeInputClassName}
                 >
                   {ACCOUNT_TYPES.map((t) => (
                     <option key={t.value} value={t.value}>
@@ -86,7 +106,7 @@ export function AccountsPage() {
                 </select>
               </div>
               <Field
-                label="Account Name"
+                label="Account name"
                 value={account.name}
                 onChange={(v) =>
                   updateData((d) => ({
@@ -110,7 +130,7 @@ export function AccountsPage() {
                 }
               />
               <Field
-                label="Account/Folio Number (masked)"
+                label="Account / folio number"
                 value={account.accountNumber}
                 placeholder="****1234"
                 onChange={(v) =>
@@ -123,7 +143,7 @@ export function AccountsPage() {
                 }
               />
               <Field
-                label="Current Value (₹)"
+                label="Current value (₹)"
                 value={account.currentValue}
                 type="number"
                 onChange={(v) =>
@@ -165,6 +185,141 @@ export function AccountsPage() {
           </Card>
         ))}
       </div>
+
+      <Card title="Money lent to others" icon="🤝">
+        <p className="mb-4 text-sm text-muted">
+          Track who borrowed from you, how much, and when they plan to pay you back.
+        </p>
+        <div className="mb-4 flex justify-end">
+          <Button
+            onClick={() =>
+              updateData((d) => ({
+                ...d,
+                receivables: [...(d.receivables ?? []), newReceivable()],
+              }))
+            }
+          >
+            Add loan
+          </Button>
+        </div>
+
+        {pendingReceivables.length === 0 && receivables.length === 0 ? (
+          <p className="rounded-2xl bg-[var(--finance-subtle)] px-4 py-6 text-center text-sm text-muted">
+            No loans recorded yet. Add someone who owes you money.
+          </p>
+        ) : (
+          <div className="grid gap-4">
+            {receivables.map((loan) => (
+              <div
+                key={loan.id}
+                className={`space-y-4 rounded-2xl border border-border p-4 ${
+                  loan.repaid ? "opacity-60" : ""
+                }`}
+              >
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="text-sm font-medium text-foreground">
+                    {loan.borrowerName || "Unnamed borrower"}
+                  </span>
+                  <label className="flex items-center gap-2 text-xs text-muted">
+                    <input
+                      type="checkbox"
+                      checked={loan.repaid}
+                      onChange={(e) =>
+                        updateData((d) => ({
+                          ...d,
+                          receivables: (d.receivables ?? []).map((r) =>
+                            r.id === loan.id ? { ...r, repaid: e.target.checked } : r
+                          ),
+                        }))
+                      }
+                      className="rounded border-border"
+                    />
+                    Repaid
+                  </label>
+                </div>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <Field
+                    label="Borrower name"
+                    value={loan.borrowerName}
+                    placeholder="Who borrowed?"
+                    onChange={(v) =>
+                      updateData((d) => ({
+                        ...d,
+                        receivables: (d.receivables ?? []).map((r) =>
+                          r.id === loan.id ? { ...r, borrowerName: v } : r
+                        ),
+                      }))
+                    }
+                  />
+                  <Field
+                    label="Amount (₹)"
+                    value={loan.amount}
+                    type="number"
+                    onChange={(v) =>
+                      updateData((d) => ({
+                        ...d,
+                        receivables: (d.receivables ?? []).map((r) =>
+                          r.id === loan.id ? { ...r, amount: Number(v) || 0 } : r
+                        ),
+                      }))
+                    }
+                  />
+                  <Field
+                    label="Date lent"
+                    value={loan.lentDate}
+                    type="date"
+                    onChange={(v) =>
+                      updateData((d) => ({
+                        ...d,
+                        receivables: (d.receivables ?? []).map((r) =>
+                          r.id === loan.id ? { ...r, lentDate: v } : r
+                        ),
+                      }))
+                    }
+                  />
+                  <Field
+                    label="Expected return date"
+                    value={loan.expectedReturnDate}
+                    type="date"
+                    onChange={(v) =>
+                      updateData((d) => ({
+                        ...d,
+                        receivables: (d.receivables ?? []).map((r) =>
+                          r.id === loan.id ? { ...r, expectedReturnDate: v } : r
+                        ),
+                      }))
+                    }
+                  />
+                  <Field
+                    label="Notes"
+                    value={loan.notes}
+                    placeholder="Optional context"
+                    onChange={(v) =>
+                      updateData((d) => ({
+                        ...d,
+                        receivables: (d.receivables ?? []).map((r) =>
+                          r.id === loan.id ? { ...r, notes: v } : r
+                        ),
+                      }))
+                    }
+                  />
+                </div>
+                <Button
+                  variant="secondary"
+                  onClick={() =>
+                    updateData((d) => ({
+                      ...d,
+                      receivables: (d.receivables ?? []).filter((r) => r.id !== loan.id),
+                    }))
+                  }
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
+      </Card>
     </div>
   );
 }
