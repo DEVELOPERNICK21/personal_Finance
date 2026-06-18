@@ -3,8 +3,10 @@
 import type { ComponentType } from "react";
 import { FinanceLayout } from "./components/layout/FinanceLayout";
 import { FinanceProvider, useFinance } from "./presentation/providers/FinanceProvider";
-import { AuthProvider, useAuth } from "./presentation/providers/AuthProvider";
+import { useAuth } from "./presentation/providers/AuthProvider";
+import { useVault } from "./presentation/providers/VaultProvider";
 import { LoginPage } from "./presentation/components/LoginPage";
+import { VaultUnlockPage } from "./presentation/components/VaultUnlockPage";
 import { AccountsPage } from "./pages/AccountsPage";
 import { DashboardPage } from "./pages/DashboardPage";
 import { DocumentsPage } from "./pages/DocumentsPage";
@@ -53,6 +55,34 @@ function FinanceShell({ slug }: { slug?: string[] }) {
   );
 }
 
+function VaultGate({
+  slug,
+  config,
+  initialData,
+}: PersonalFinanceMountProps) {
+  const { status: vaultStatus } = useVault();
+
+  if (vaultStatus === "loading") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black text-sm text-white/60">
+        Securing your vault...
+      </div>
+    );
+  }
+
+  if (vaultStatus === "locked" || vaultStatus === "setup") {
+    return <VaultUnlockPage />;
+  }
+
+  return (
+    <FinanceProvider config={config} initialData={initialData}>
+      <FinanceLayout>
+        <FinanceShell slug={slug} />
+      </FinanceLayout>
+    </FinanceProvider>
+  );
+}
+
 function AuthGate({
   slug,
   config,
@@ -73,11 +103,7 @@ function AuthGate({
   }
 
   return (
-    <FinanceProvider config={config} initialData={initialData}>
-      <FinanceLayout>
-        <FinanceShell slug={slug} />
-      </FinanceLayout>
-    </FinanceProvider>
+    <VaultGate slug={slug} config={config} initialData={initialData} />
   );
 }
 
@@ -86,9 +112,5 @@ export function PersonalFinanceMount({
   config,
   initialData,
 }: PersonalFinanceMountProps) {
-  return (
-    <AuthProvider>
-      <AuthGate slug={slug} config={config} initialData={initialData} />
-    </AuthProvider>
-  );
+  return <AuthGate slug={slug} config={config} initialData={initialData} />;
 }

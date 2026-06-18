@@ -122,7 +122,7 @@ export function DashboardPage() {
         <div className="grid gap-4 lg:grid-cols-2">
           <DashCard title="Monthly cash flow" subtitle="Income vs what you spend & save">
             <div className="space-y-4">
-              <FlowRow label="Income" amount={metrics.monthlyIncome} max={metrics.monthlyIncome} color="bg-[#171717]" />
+              <FlowRow label="Income" amount={metrics.monthlyIncome} max={metrics.monthlyIncome} color="bg-foreground" />
               <FlowRow
                 label="Expenses"
                 amount={metrics.monthlyExpenses}
@@ -153,7 +153,7 @@ export function DashboardPage() {
               <SplitBar
                 label="Fixed costs"
                 percent={metrics.salaryAllocation.fixed}
-                color="bg-[#171717]"
+                color="bg-foreground"
               />
               <SplitBar
                 label="Lifestyle"

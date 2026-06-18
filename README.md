@@ -83,6 +83,31 @@ Or connect your GitHub repo at [vercel.com](https://vercel.com).
 
 Without Firebase env vars, the app falls back to local-only mode (fine for local dev).
 
+## Security & encryption
+
+Financial data is protected in **layers**:
+
+| Layer | What it does |
+|-------|----------------|
+| **HTTPS** | Data encrypted in transit between browser and server |
+| **Firebase Auth** | Only you can access your `/api/finance` endpoints |
+| **Firestore rules** | Direct client database access is blocked (`allow read, write: if false`) |
+| **Google at-rest encryption** | Firestore encrypts disks by default (AES-256) |
+| **Client-side vault (E2EE)** | Your finance JSON is encrypted with **AES-256-GCM** before upload |
+
+### Vault passphrase (end-to-end encryption)
+
+After sign-in you will:
+
+1. **Create a vault passphrase** (first time) — separate from your login password
+2. **Unlock the vault** each browser session
+
+Your passphrase derives an encryption key via **PBKDF2** (210k iterations). Only encrypted ciphertext is stored in Firestore and `localStorage`. The server and Firebase **cannot read** account numbers, balances, or policy details.
+
+**Important:** If you lose your vault passphrase, your encrypted data **cannot be recovered**. Store it safely (password manager, secure note).
+
+Legacy accounts with plaintext cloud data are automatically re-encrypted on the next save after vault setup.
+
 ## Quick Start (Local)
 
 ```bash

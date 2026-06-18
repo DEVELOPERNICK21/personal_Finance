@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { Bell, ChevronDown, LogOut } from "lucide-react";
 import { useAuth } from "../../presentation/providers/AuthProvider";
 import { ThemeToggle } from "../../presentation/components/ThemeToggle";
+import { useVault } from "../../presentation/providers/VaultProvider";
 import { FinanceSidebar } from "./FinanceSidebar";
 import { useFinance } from "../../presentation/providers/FinanceProvider";
 import type { SaveStatus } from "../../presentation/providers/FinanceProvider";
@@ -55,6 +56,7 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
 
 export function FinanceLayout({ children }: FinanceLayoutProps) {
   const { user, signOut } = useAuth();
+  const { lock } = useVault();
   const { saveStatus, usesCloudStorage, retryCloudSync } = useFinance();
 
   return (
@@ -85,6 +87,13 @@ export function FinanceLayout({ children }: FinanceLayoutProps) {
               </button>
             )}
             <ThemeToggle />
+            <button
+              type="button"
+              onClick={() => lock()}
+              className="hidden rounded-xl border border-border bg-[var(--finance-card)] px-3 py-2 text-xs font-medium text-muted hover:text-foreground sm:flex"
+            >
+              Lock vault
+            </button>
             <button
               type="button"
               className="text-muted hover:text-foreground"

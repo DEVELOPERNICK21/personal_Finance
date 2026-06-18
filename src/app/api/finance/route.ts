@@ -5,7 +5,7 @@ import {
   saveFinanceToDb,
   verifyIdToken,
 } from "@/lib/firebase-admin";
-import type { FinanceData } from "@/features/personal-finance/core/domain/types";
+import type { FinanceStoragePayload } from "@/features/personal-finance/core/domain/storage-record";
 
 async function getUidFromRequest(request: NextRequest): Promise<string | null> {
   const header = request.headers.get("authorization");
@@ -55,9 +55,13 @@ export async function PUT(request: NextRequest) {
   }
 
   try {
-    const body = (await request.json()) as FinanceData;
+    const body = (await request.json()) as FinanceStoragePayload;
+    const lastUpdated =
+      "lastUpdated" in body && typeof body.lastUpdated === "string"
+        ? body.lastUpdated
+        : new Date().toISOString();
     await saveFinanceToDb(uid, body as unknown as Record<string, unknown>);
-    return NextResponse.json({ ok: true, lastUpdated: body.lastUpdated });
+    return NextResponse.json({ ok: true, lastUpdated });
   } catch (error) {
     console.error("Failed to save finance data:", error);
     return NextResponse.json({ error: "Failed to save data" }, { status: 500 });

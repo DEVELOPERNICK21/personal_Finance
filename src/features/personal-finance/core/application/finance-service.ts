@@ -2,12 +2,22 @@ import { calculateMetrics } from "../domain/calculations";
 import { DEFAULT_FINANCE_DATA } from "../domain/defaults";
 import type { FinanceData, FinanceMetrics } from "../domain/types";
 import {
-  fetchRemoteFinanceData,
+  isEncryptedFinanceRecord,
+  isLegacyFinanceData,
+} from "../domain/storage-record";
+import {
+  decryptPayload,
+  fetchRemoteFinancePayload,
   hasLocalFinanceData,
   loadLocalFinanceData,
   persistRemoteFinanceData,
   saveLocalFinanceData,
 } from "../../infrastructure/finance-repository";
+
+export interface VaultCrypto {
+  key: CryptoKey;
+  salt: Uint8Array;
+}
 
 export function deriveMetrics(
   data: FinanceData,
@@ -21,35 +31,58 @@ export function mergeFinanceData(remote: FinanceData | null): FinanceData {
   return { ...DEFAULT_FINANCE_DATA, ...remote };
 }
 
-export async function loadFinanceForUser(uid: string): Promise<{
+async function resolveRemoteData(crypto?: VaultCrypto | null): Promise<FinanceData | null> {
+  const payload = await fetchRemoteFinancePayload();
+  if (!payload) return null;
+
+  if (isEncryptedFinanceRecord(payload)) {
+    if (!crypto) throw new Error("VAULT_LOCKED");
+    return decryptPayload(payload, crypto.key);
+  }
+
+  if (isLegacyFinanceData(payload)) {
+    return mergeFinanceData(payload);
+  }
+
+  return null;
+}
+
+export async function loadFinanceForUser(
+  uid: string,
+  crypto?: VaultCrypto | null
+): Promise<{
   data: FinanceData;
   source: "remote" | "local" | "default";
 }> {
   try {
-    const remote = await fetchRemoteFinanceData();
+    const remote = await resolveRemoteData(crypto);
     if (remote) {
-      const merged = mergeFinanceData(remote);
-      saveLocalFinanceData(uid, merged);
-      return { data: merged, source: "remote" };
+      await saveLocalFinanceData(uid, remote, crypto?.key, crypto?.salt);
+      return { data: remote, source: "remote" };
     }
 
-    const local = loadLocalFinanceData(uid);
     if (hasLocalFinanceData(uid)) {
-      await persistRemoteFinanceData(local);
+      const local = await loadLocalFinanceData(uid, crypto?.key);
+      await persistRemoteFinanceData(local, crypto?.key, crypto?.salt);
       return { data: local, source: "local" };
     }
 
-    await persistRemoteFinanceData(DEFAULT_FINANCE_DATA);
+    await persistRemoteFinanceData(DEFAULT_FINANCE_DATA, crypto?.key, crypto?.salt);
     return { data: DEFAULT_FINANCE_DATA, source: "default" };
   } catch (error) {
     if (error instanceof Error && error.message === "CLOUD_NOT_CONFIGURED") {
-      return { data: loadLocalFinanceData(uid), source: "local" };
+      const local = await loadLocalFinanceData(uid, crypto?.key);
+      return { data: local, source: "local" };
     }
     throw error;
   }
 }
 
-export async function saveFinanceForUser(uid: string, data: FinanceData): Promise<void> {
-  saveLocalFinanceData(uid, data);
-  await persistRemoteFinanceData(data);
+export async function saveFinanceForUser(
+  uid: string,
+  data: FinanceData,
+  crypto?: VaultCrypto | null
+): Promise<void> {
+  await saveLocalFinanceData(uid, data, crypto?.key, crypto?.salt);
+  await persistRemoteFinanceData(data, crypto?.key, crypto?.salt);
 }

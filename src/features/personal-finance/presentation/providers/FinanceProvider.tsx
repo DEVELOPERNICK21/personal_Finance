@@ -16,6 +16,7 @@ import type { FinanceConfig, FinanceData, FinanceMetrics } from "../../core/doma
 import { saveLocalFinanceData } from "../../infrastructure/finance-repository";
 import { createFinanceConfig } from "../../config";
 import { useAuth } from "./AuthProvider";
+import { useVault } from "./VaultProvider";
 
 export type SaveStatus = "idle" | "loading" | "saving" | "saved" | "error" | "offline";
 
@@ -48,6 +49,7 @@ export function FinanceProvider({
   initialData,
 }: FinanceProviderProps) {
   const { user, status: authStatus } = useAuth();
+  const { cryptoKey, salt, status: vaultStatus } = useVault();
   const config = useMemo(
     () => createFinanceConfig(configOverrides),
     [configOverrides]
@@ -72,18 +74,23 @@ export function FinanceProvider({
     usesCloudRef.current = usesCloudStorage;
   }, [usesCloudStorage]);
 
+  const vaultCrypto = useMemo(
+    () => (cryptoKey && salt ? { key: cryptoKey, salt } : null),
+    [cryptoKey, salt]
+  );
+
   const persistToCloud = useCallback(async (payload: FinanceData) => {
     const uid = userRef.current?.uid;
-    if (!uid || !usesCloudRef.current) return;
+    if (!uid || !usesCloudRef.current || !vaultCrypto) return;
 
     setSaveStatus("saving");
     try {
-      await saveFinanceForUser(uid, payload);
+      await saveFinanceForUser(uid, payload, vaultCrypto);
       setSaveStatus("saved");
     } catch {
       setSaveStatus("error");
     }
-  }, []);
+  }, [vaultCrypto]);
 
   const flushSave = useCallback(async () => {
     if (saveTimerRef.current) {
@@ -91,18 +98,19 @@ export function FinanceProvider({
       saveTimerRef.current = null;
     }
     const uid = userRef.current?.uid;
-    if (!uid || skipSaveRef.current) return;
+    if (!uid || skipSaveRef.current || !vaultCrypto) return;
 
-    saveLocalFinanceData(uid, dataRef.current);
+    void saveLocalFinanceData(uid, dataRef.current, vaultCrypto.key, vaultCrypto.salt);
     if (usesCloudRef.current) {
       await persistToCloud(dataRef.current);
     }
-  }, [persistToCloud]);
+  }, [persistToCloud, vaultCrypto]);
 
   const loadUserFinance = useCallback(async (uid: string) => {
+    if (!vaultCrypto) return;
     setSaveStatus("loading");
     try {
-      const result = await loadFinanceForUser(uid);
+      const result = await loadFinanceForUser(uid, vaultCrypto);
       setData(result.data);
       dataRef.current = result.data;
       setUsesCloudStorage(true);
@@ -119,11 +127,11 @@ export function FinanceProvider({
       }
       setSaveStatus("error");
     }
-  }, []);
+  }, [vaultCrypto]);
 
   useEffect(() => {
     if (initialData) return;
-    if (authStatus === "loading") return;
+    if (authStatus === "loading" || vaultStatus !== "unlocked" || !vaultCrypto) return;
 
     if (!user) {
       queueMicrotask(() => {
@@ -137,7 +145,7 @@ export function FinanceProvider({
     queueMicrotask(() => {
       void loadUserFinance(user.uid);
     });
-  }, [initialData, authStatus, user, loadUserFinance]);
+  }, [initialData, authStatus, vaultStatus, vaultCrypto, user, loadUserFinance]);
 
   useEffect(() => {
     skipSaveRef.current = false;
@@ -148,9 +156,9 @@ export function FinanceProvider({
   }, [data]);
 
   useEffect(() => {
-    if (skipSaveRef.current || !user) return;
+    if (skipSaveRef.current || !user || !vaultCrypto) return;
 
-    saveLocalFinanceData(user.uid, data);
+    void saveLocalFinanceData(user.uid, data, vaultCrypto.key, vaultCrypto.salt);
 
     if (!usesCloudStorage) return;
 
@@ -163,13 +171,13 @@ export function FinanceProvider({
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
-  }, [data, usesCloudStorage, user, persistToCloud]);
+  }, [data, usesCloudStorage, user, persistToCloud, vaultCrypto]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {
       const uid = userRef.current?.uid;
-      if (!uid || skipSaveRef.current) return;
-      saveLocalFinanceData(uid, dataRef.current);
+      if (!uid || skipSaveRef.current || !vaultCrypto) return;
+      void saveLocalFinanceData(uid, dataRef.current, vaultCrypto.key, vaultCrypto.salt);
     };
 
     const handleVisibilityChange = () => {
@@ -186,7 +194,7 @@ export function FinanceProvider({
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       void flushSave();
     };
-  }, [flushSave]);
+  }, [flushSave, vaultCrypto]);
 
   const updateData = useCallback((updater: (prev: FinanceData) => FinanceData) => {
     setData((prev) => {
