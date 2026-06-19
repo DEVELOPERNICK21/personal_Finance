@@ -1,5 +1,5 @@
 import { calculateMetrics } from "../domain/calculations";
-import { DEFAULT_FINANCE_DATA } from "../domain/defaults";
+import { createEmptyFinanceData, normalizeFinanceData } from "../domain/defaults";
 import type { FinanceData, FinanceMetrics } from "../domain/types";
 import {
   isEncryptedFinanceRecord,
@@ -27,8 +27,8 @@ export function deriveMetrics(
 }
 
 export function mergeFinanceData(remote: FinanceData | null): FinanceData {
-  if (!remote) return DEFAULT_FINANCE_DATA;
-  return { ...DEFAULT_FINANCE_DATA, ...remote };
+  if (!remote) return createEmptyFinanceData();
+  return normalizeFinanceData(remote);
 }
 
 async function resolveRemoteData(crypto?: VaultCrypto | null): Promise<FinanceData | null> {
@@ -41,7 +41,7 @@ async function resolveRemoteData(crypto?: VaultCrypto | null): Promise<FinanceDa
   }
 
   if (isLegacyFinanceData(payload)) {
-    return mergeFinanceData(payload);
+    return normalizeFinanceData(payload);
   }
 
   return null;
@@ -54,6 +54,8 @@ export async function loadFinanceForUser(
   data: FinanceData;
   source: "remote" | "local" | "default";
 }> {
+  const empty = createEmptyFinanceData();
+
   try {
     const remote = await resolveRemoteData(crypto);
     if (remote) {
@@ -67,8 +69,8 @@ export async function loadFinanceForUser(
       return { data: local, source: "local" };
     }
 
-    await persistRemoteFinanceData(DEFAULT_FINANCE_DATA, crypto?.key, crypto?.salt);
-    return { data: DEFAULT_FINANCE_DATA, source: "default" };
+    await persistRemoteFinanceData(empty, crypto?.key, crypto?.salt);
+    return { data: empty, source: "default" };
   } catch (error) {
     if (error instanceof Error && error.message === "CLOUD_NOT_CONFIGURED") {
       const local = await loadLocalFinanceData(uid, crypto?.key);

@@ -57,4 +57,4 @@ export {
   exportFinanceData,
   importFinanceData,
 } from "./lib/storage";
-export { DEFAULT_FINANCE_DATA } from "./lib/defaults";
+export { DEFAULT_FINANCE_DATA, createEmptyFinanceData, normalizeFinanceData } from "./lib/defaults";

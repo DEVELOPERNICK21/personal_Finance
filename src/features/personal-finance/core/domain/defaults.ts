@@ -1,91 +1,72 @@
 import type { FinanceData } from "./types";
 
-export const DEFAULT_FINANCE_DATA: FinanceData = {
-  lastUpdated: new Date().toISOString(),
-  assets: {
-    emergencyCash: 150000,
-    vaultLocation: "Kotak Savings Account",
-    providentFund: 70000,
-    uanNumber: "",
-  },
-  monthly: {
-    income: 65000,
-    fixedExpenses: 15000,
-    variableExpenses: 8000,
-    investments: 10000,
-    momSupport: 15000,
-    rentUtilities: 20000,
-    lifestyleCap: 8000,
-    emergencyTopUp: 5000,
-    sipCapacity: 10000,
-  },
-  accounts: [
-    {
-      id: "1",
-      type: "bank",
-      name: "Primary Savings",
-      institution: "Kotak Mahindra Bank",
-      accountNumber: "****4521",
-      currentValue: 150000,
-      nominee: "Kalpana Ghodki (Mother)",
+/** Blank slate for new users — no sample names, balances, or nominees. */
+export function createEmptyFinanceData(): FinanceData {
+  return {
+    lastUpdated: new Date().toISOString(),
+    assets: {
+      emergencyCash: 0,
+      vaultLocation: "",
+      providentFund: 0,
+      uanNumber: "",
     },
-    {
-      id: "2",
-      type: "epf",
-      name: "Employee Provident Fund",
-      institution: "EPFO",
-      accountNumber: "UAN pending",
-      currentValue: 70000,
-      nominee: "Kalpana Ghodki (Mother)",
+    monthly: {
+      income: 0,
+      fixedExpenses: 0,
+      variableExpenses: 0,
+      investments: 0,
+      momSupport: 0,
+      rentUtilities: 0,
+      lifestyleCap: 0,
+      emergencyTopUp: 0,
+      sipCapacity: 0,
     },
-  ],
-  goals: [
-    { id: "1", name: "Emergency Fund", target: 250000, current: 150000 },
-    { id: "2", name: "Vacation", target: 100000, current: 25000 },
-    { id: "3", name: "Car", target: 500000, current: 80000 },
-    { id: "4", name: "House", target: 5000000, current: 200000 },
-    { id: "5", name: "Retirement", target: 20000000, current: 70000 },
-  ],
-  insurance: [
-    {
-      id: "1",
-      type: "term",
-      name: "Term Life Cover (₹1 Crore Assurance)",
-      policyNumber: "188144745",
-      coverage: 10000000,
-      renewalDate: "",
-      nominee: "Kalpana Ghodki (Mother)",
+    accounts: [],
+    goals: [],
+    insurance: [],
+    documents: [],
+    contacts: [],
+    receivables: [],
+    instructions: {
+      salaryAccount: "",
+      investmentLocations: "",
+      insuranceClaimSteps: "",
+      firstContact: "",
+      additionalNotes: "",
     },
-    {
-      id: "2",
-      type: "health",
-      name: "Medical Shield Cover (₹10 Lakhs Cover)",
-      policyNumber: "",
-      coverage: 1000000,
-      renewalDate: "2026-07-12",
-      nominee: "",
+    monthEndChecklist: {
+      verifyBankLogs: false,
+      confirmSipClearance: false,
+      verifyBurnUnder30k: false,
+      auditPolicyDates: false,
     },
-  ],
-  documents: [],
-  contacts: [
-    { id: "1", role: "Trusted Family Successor", name: "Kalpana Ghodki (Mother)", contact: "" },
-    { id: "2", role: "Chartered Accountant (Tax)", name: "", contact: "" },
-    { id: "3", role: "Primary Bank Manager", name: "", contact: "" },
-    { id: "4", role: "Insurance Advisor Node", name: "", contact: "" },
-  ],
-  receivables: [],
-  instructions: {
-    salaryAccount: "Kotak Savings Account",
-    investmentLocations: "EPF via employer, SIPs via Groww",
-    insuranceClaimSteps: "Contact insurer with policy number, submit death certificate and nominee ID",
-    firstContact: "Kalpana Ghodki (Mother)",
-    additionalNotes: "",
-  },
-  monthEndChecklist: {
-    verifyBankLogs: false,
-    confirmSipClearance: false,
-    verifyBurnUnder30k: false,
-    auditPolicyDates: false,
-  },
-  sosMode: false,
-};
+    sosMode: false,
+  };
+}
+
+/** @deprecated Use createEmptyFinanceData() */
+export const DEFAULT_FINANCE_DATA: FinanceData = createEmptyFinanceData();
+
+/** Merge saved user data onto empty defaults (never injects demo/sample values). */
+export function normalizeFinanceData(partial: Partial<FinanceData>): FinanceData {
+  const empty = createEmptyFinanceData();
+  return {
+    ...empty,
+    ...partial,
+    lastUpdated: partial.lastUpdated ?? empty.lastUpdated,
+    assets: { ...empty.assets, ...partial.assets },
+    monthly: { ...empty.monthly, ...partial.monthly },
+    instructions: { ...empty.instructions, ...partial.instructions },
+    accounts: partial.accounts ?? empty.accounts,
+    goals: partial.goals ?? empty.goals,
+    insurance: partial.insurance ?? empty.insurance,
+    documents: partial.documents ?? empty.documents,
+    contacts: partial.contacts ?? empty.contacts,
+    receivables: partial.receivables ?? empty.receivables,
+    monthEndChecklist: {
+      ...empty.monthEndChecklist,
+      ...partial.monthEndChecklist,
+    },
+    sosMode: partial.sosMode ?? false,
+  };
+}

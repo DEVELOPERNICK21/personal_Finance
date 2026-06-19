@@ -1,4 +1,4 @@
-import { DEFAULT_FINANCE_DATA } from "../core/domain/defaults";
+import { createEmptyFinanceData, normalizeFinanceData } from "../core/domain/defaults";
 import type { FinanceData } from "../core/domain/types";
 import {
   isEncryptedFinanceRecord,
@@ -37,20 +37,20 @@ export async function loadLocalFinanceData(
   cryptoKey?: CryptoKey | null
 ): Promise<FinanceData> {
   const payload = loadLocalFinancePayload(uid);
-  if (!payload) return DEFAULT_FINANCE_DATA;
+  if (!payload) return createEmptyFinanceData();
 
   if (isEncryptedFinanceRecord(payload)) {
     if (!cryptoKey) throw new Error("VAULT_LOCKED");
     const { decryptFinanceData } = await import("./crypto-vault");
     const data = await decryptFinanceData(payload, cryptoKey);
-    return { ...DEFAULT_FINANCE_DATA, ...data };
+    return normalizeFinanceData(data);
   }
 
   if (isLegacyFinanceData(payload)) {
-    return { ...DEFAULT_FINANCE_DATA, ...payload };
+    return normalizeFinanceData(payload);
   }
 
-  return DEFAULT_FINANCE_DATA;
+  return createEmptyFinanceData();
 }
 
 export function saveLocalFinancePayload(uid: string, payload: FinanceStoragePayload): void {
@@ -74,13 +74,13 @@ export async function saveLocalFinanceData(
 
 /** @deprecated Use loadLocalFinanceData(uid, key) */
 export function loadFinanceData(uid?: string): FinanceData {
-  if (!uid) return DEFAULT_FINANCE_DATA;
+  if (!uid) return createEmptyFinanceData();
   const payload = loadLocalFinancePayload(uid);
-  if (!payload) return DEFAULT_FINANCE_DATA;
+  if (!payload) return createEmptyFinanceData();
   if (isLegacyFinanceData(payload)) {
-    return { ...DEFAULT_FINANCE_DATA, ...payload };
+    return normalizeFinanceData(payload);
   }
-  return DEFAULT_FINANCE_DATA;
+  return createEmptyFinanceData();
 }
 
 /** @deprecated Use saveLocalFinanceData */
@@ -95,7 +95,10 @@ export function exportFinanceData(data: FinanceData): string {
 
 export function importFinanceData(json: string): FinanceData {
   const parsed = JSON.parse(json) as FinanceData;
-  return { ...DEFAULT_FINANCE_DATA, ...parsed, lastUpdated: new Date().toISOString() };
+  return normalizeFinanceData({
+    ...parsed,
+    lastUpdated: new Date().toISOString(),
+  });
 }
 
 async function authHeaders(): Promise<HeadersInit> {
@@ -175,5 +178,5 @@ export async function decryptPayload(
 ): Promise<FinanceData> {
   const { decryptFinanceData } = await import("./crypto-vault");
   const data = await decryptFinanceData(payload, cryptoKey);
-  return { ...DEFAULT_FINANCE_DATA, ...data };
+  return normalizeFinanceData(data);
 }

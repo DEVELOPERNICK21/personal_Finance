@@ -2,8 +2,6 @@ import { cert, getApps, initializeApp, type App } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore, type Firestore } from "firebase-admin/firestore";
 
-const LEGACY_DOC_PATH = "personalFinance/main";
-
 let app: App | undefined;
 let db: Firestore | undefined;
 
@@ -47,15 +45,7 @@ export async function verifyIdToken(token: string): Promise<string> {
 export async function loadFinanceFromDb(uid: string): Promise<Record<string, unknown> | null> {
   const userDoc = await getAdminDb().doc(userFinancePath(uid)).get();
   if (userDoc.exists) return userDoc.data() ?? null;
-
-  const legacy = await getAdminDb().doc(LEGACY_DOC_PATH).get();
-  if (!legacy.exists) return null;
-
-  const legacyData = legacy.data() ?? null;
-  if (legacyData) {
-    await getAdminDb().doc(userFinancePath(uid)).set(legacyData, { merge: false });
-  }
-  return legacyData;
+  return null;
 }
 
 export async function saveFinanceToDb(

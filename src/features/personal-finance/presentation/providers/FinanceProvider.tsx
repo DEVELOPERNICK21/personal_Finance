@@ -11,7 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { deriveMetrics, loadFinanceForUser, saveFinanceForUser } from "../../core/application/finance-service";
-import { DEFAULT_FINANCE_DATA } from "../../core/domain/defaults";
+import { createEmptyFinanceData } from "../../core/domain/defaults";
 import type { FinanceConfig, FinanceData, FinanceMetrics } from "../../core/domain/types";
 import { saveLocalFinanceData } from "../../infrastructure/finance-repository";
 import { createFinanceConfig } from "../../config";
@@ -55,7 +55,7 @@ export function FinanceProvider({
     [configOverrides]
   );
 
-  const [data, setData] = useState<FinanceData>(() => initialData ?? DEFAULT_FINANCE_DATA);
+  const [data, setData] = useState<FinanceData>(() => initialData ?? createEmptyFinanceData());
   const [saveStatus, setSaveStatus] = useState<SaveStatus>(
     initialData ? "saved" : "loading"
   );
@@ -134,22 +134,23 @@ export function FinanceProvider({
     if (authStatus === "loading" || vaultStatus !== "unlocked" || !vaultCrypto) return;
 
     if (!user) {
+      skipSaveRef.current = true;
       queueMicrotask(() => {
-        setData(DEFAULT_FINANCE_DATA);
+        setData(createEmptyFinanceData());
         setSaveStatus("offline");
         setUsesCloudStorage(false);
       });
       return;
     }
 
+    skipSaveRef.current = true;
+    setData(createEmptyFinanceData());
+    setSaveStatus("loading");
     queueMicrotask(() => {
+      skipSaveRef.current = false;
       void loadUserFinance(user.uid);
     });
   }, [initialData, authStatus, vaultStatus, vaultCrypto, user, loadUserFinance]);
-
-  useEffect(() => {
-    skipSaveRef.current = false;
-  }, []);
 
   useEffect(() => {
     dataRef.current = data;
