@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-pwa-icons.mjs && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "icons": "node scripts/generate-pwa-icons.mjs"
@@ -29,7 +29,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.9",
     "serwist": "^9.5.11",
-    "sharp": "^0.35.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
