@@ -15,40 +15,12 @@ export default function AppleIcon() {
           justifyContent: "center",
           background: "#171717",
           borderRadius: 36,
+          fontSize: 96,
+          fontWeight: 700,
+          color: "#ffffff",
         }}
       >
-        <div
-          style={{
-            width: 112,
-            height: 78,
-            background: "#ffffff",
-            borderRadius: 20,
-            position: "relative",
-          }}
-        >
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 24,
-              background: "#e5e5e5",
-              borderRadius: "20px 20px 0 0",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              right: 18,
-              top: 34,
-              width: 28,
-              height: 28,
-              borderRadius: "50%",
-              background: "#171717",
-            }}
-          />
-        </div>
+        ₹
       </div>
     ),
     { ...size }
