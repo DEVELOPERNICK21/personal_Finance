@@ -105,7 +105,7 @@ export function OnboardingPage({ onComplete }: OnboardingPageProps) {
   return (
     <>
       {/* ——— Mobile (unchanged) ——— */}
-      <main className="finance-app relative mx-auto flex min-h-screen max-w-[var(--vault-max-width)] flex-col bg-[var(--vault-background)] px-[var(--vault-margin)] text-[var(--vault-on-surface)] lg:hidden">
+      <main className="finance-app relative mx-auto flex min-h-screen max-w-[var(--vault-max-width)] flex-col bg-[var(--vault-background)] px-[var(--vault-margin)] text-[var(--vault-on-surface)] md:hidden">
         <OnboardingStepper step={step} />
 
         <AnimatePresence mode="wait">
@@ -137,7 +137,7 @@ export function OnboardingPage({ onComplete }: OnboardingPageProps) {
               setSavings={setSavings}
               setInvestments={setInvestments}
               onFinish={() => finish(true)}
-              onSkip={() => finish(true)}
+              onSkip={() => finish(false)}
             />
           )}
         </AnimatePresence>
@@ -149,7 +149,7 @@ export function OnboardingPage({ onComplete }: OnboardingPageProps) {
       </main>
 
       {/* ——— Desktop (Stitch layouts) ——— */}
-      <div className="onboarding-desktop relative hidden min-h-screen text-[#191c1d] lg:block">
+      <div className="onboarding-desktop fixed inset-0 z-50 hidden min-h-screen overflow-y-auto text-[#191c1d] md:block">
         <OnboardingDesktopBackground />
         <OnboardingDesktopHeader />
         {step === 1 && (

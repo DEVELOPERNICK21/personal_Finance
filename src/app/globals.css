@@ -241,8 +241,24 @@ input[type="checkbox"] {
   background: var(--vault-secondary);
 }
 
-/* Desktop onboarding — always light (matches Stitch) */
+/* Desktop onboarding — always light (matches Stitch), immune to .dark */
 .onboarding-desktop {
+  color-scheme: light;
   background-color: #f8f9fa;
   color: #191c1d;
+  --vault-primary: #00694c;
+  --vault-primary-container: #008560;
+  --vault-on-primary: #ffffff;
+  --vault-on-primary-container: #f5fff7;
+  --vault-secondary: #5951b4;
+  --vault-surface: #f8f9fa;
+  --vault-background: #f8f9fa;
+  --vault-on-surface: #191c1d;
+  --vault-on-surface-variant: #3d4943;
+  --vault-outline: #6d7a73;
+  --vault-outline-variant: #bccac1;
+  --vault-surface-container-lowest: #ffffff;
+  --vault-surface-container-low: #f3f4f5;
+  --vault-surface-container: #edeeef;
+  --vault-surface-container-high: #e7e8e9;
 }
