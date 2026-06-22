@@ -17,6 +17,7 @@ import { InsurancePage } from "./pages/InsurancePage";
 import { InvestmentsPage } from "./pages/InvestmentsPage";
 import { MonthlyMoneyPage } from "./pages/MonthlyMoneyPage";
 import { MorePage } from "./pages/MorePage";
+import { RoadmapPage } from "./pages/RoadmapPage";
 import { resolveFinanceSlug, type FinanceRouteSlug } from "./routes";
 import type { FinanceConfig, FinanceData } from "./types";
 import { GUEST_UID, loadGuestProfile } from "./lib/guest-profile";
@@ -29,6 +30,7 @@ const PAGE_MAP: Record<FinanceRouteSlug, ComponentType> = {
   investments: InvestmentsPage,
   monthly: MonthlyMoneyPage,
   goals: GoalsPage,
+  roadmap: RoadmapPage,
   insurance: InsurancePage,
   documents: DocumentsPage,
   emergency: EmergencyPage,

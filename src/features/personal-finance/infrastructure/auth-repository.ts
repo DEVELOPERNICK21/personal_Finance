@@ -1,12 +1,16 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
+  EmailAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   type User,
 } from "firebase/auth";
 import { getFirebaseAuth, isFirebaseClientConfigured } from "@/lib/firebase/client";
+import { clearLocalFinanceData } from "./finance-repository";
 
 export interface AuthUser {
   uid: string;
@@ -59,4 +63,32 @@ export async function getIdToken(forceRefresh = false): Promise<string | null> {
   const user = getFirebaseAuth().currentUser;
   if (!user) return null;
   return user.getIdToken(forceRefresh);
+}
+
+export async function deleteUserAccount(password: string): Promise<void> {
+  const auth = getFirebaseAuth();
+  const user = auth.currentUser;
+  if (!user?.email) {
+    throw new Error("NOT_AUTHENTICATED");
+  }
+
+  const credential = EmailAuthProvider.credential(user.email, password);
+  await reauthenticateWithCredential(user, credential);
+
+  const uid = user.uid;
+  const token = await user.getIdToken(true);
+  const response = await fetch("/api/account", {
+    method: "DELETE",
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+
+  if (response.status === 503) {
+    await deleteUser(user);
+  } else if (!response.ok) {
+    const body = (await response.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(body?.error ?? "DELETE_FAILED");
+  }
+
+  clearLocalFinanceData(uid);
+  await signOut(auth);
 }

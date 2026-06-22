@@ -7,6 +7,7 @@ import {
   Home,
   Landmark,
   Lock,
+  Map,
   MoreHorizontal,
   Phone,
   Shield,
@@ -36,6 +37,7 @@ const SIDEBAR_LINKS = [
 ] as const;
 
 const MORE_LINKS = [
+  { slug: "roadmap" as const, label: "Roadmap", icon: Map },
   { slug: "accounts" as const, label: "Accounts", icon: Landmark },
   { slug: "investments" as const, label: "Investments", icon: TrendingUp },
   { slug: "insurance" as const, label: "Insurance", icon: Shield },

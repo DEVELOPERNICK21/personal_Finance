@@ -55,6 +55,14 @@ export async function saveFinanceToDb(
   await getAdminDb().doc(userFinancePath(uid)).set(data, { merge: false });
 }
 
+export async function deleteUserFinanceFromDb(uid: string): Promise<void> {
+  await getAdminDb().doc(userFinancePath(uid)).delete();
+}
+
+export async function deleteAuthUser(uid: string): Promise<void> {
+  await getAuth(getFirebaseApp()).deleteUser(uid);
+}
+
 export function isCloudStorageConfigured(): boolean {
   return Boolean(
     process.env.FIREBASE_PROJECT_ID &&

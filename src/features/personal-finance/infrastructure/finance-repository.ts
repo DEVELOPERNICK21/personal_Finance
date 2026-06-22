@@ -58,6 +58,11 @@ export function saveLocalFinancePayload(uid: string, payload: FinanceStoragePayl
   localStorage.setItem(storageKey(uid), JSON.stringify(payload));
 }
 
+export function clearLocalFinanceData(uid: string): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(storageKey(uid));
+}
+
 export async function saveLocalFinanceData(
   uid: string,
   data: FinanceData,

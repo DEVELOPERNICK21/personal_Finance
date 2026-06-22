@@ -4,6 +4,7 @@ export const FINANCE_ROUTES = [
   { slug: "investments", label: "Investments", icon: "📈" },
   { slug: "monthly", label: "Monthly Money", icon: "📊" },
   { slug: "goals", label: "Goals", icon: "🎯" },
+  { slug: "roadmap", label: "Roadmap", icon: "🗺️" },
   { slug: "insurance", label: "Insurance", icon: "🛡️" },
   { slug: "documents", label: "Documents", icon: "📄" },
   { slug: "emergency", label: "Emergency Info", icon: "☎" },

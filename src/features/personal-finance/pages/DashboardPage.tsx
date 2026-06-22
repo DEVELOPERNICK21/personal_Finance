@@ -104,9 +104,17 @@ export function DashboardPage() {
         </div>
       </section>
 
-      {/* Journey */}
+      {/* Journey — preview; full roadmap on dedicated page */}
       <section className="rounded-xl border border-[var(--vault-outline-variant)] bg-[var(--vault-surface-container-low)] p-5">
-        <h2 className="vault-headline-sm mb-6">Financial Journey</h2>
+        <div className="mb-6 flex items-center justify-between gap-2">
+          <h2 className="vault-headline-sm">Financial Journey</h2>
+          <Link
+            href={financeHref(base, "roadmap")}
+            className="vault-label-md text-[var(--vault-primary)] hover:underline"
+          >
+            Full roadmap →
+          </Link>
+        </div>
         <div className="relative space-y-8">
           {journey.map((step, i) => (
             <div key={step.level} className="relative flex gap-4">

@@ -10,6 +10,7 @@ import {
   type ReactNode,
 } from "react";
 import {
+  deleteUserAccount,
   isAuthConfigured,
   resetPassword,
   signInWithEmail,
@@ -28,6 +29,7 @@ interface AuthContextValue {
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  deleteAccount: (password: string) => Promise<void>;
   sendPasswordReset: (email: string) => Promise<void>;
 }
 
@@ -61,6 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await signOutUser();
   }, []);
 
+  const deleteAccount = useCallback(async (password: string) => {
+    await deleteUserAccount(password);
+  }, []);
+
   const sendPasswordReset = useCallback(async (email: string) => {
     await resetPassword(email);
   }, []);
@@ -73,9 +79,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signIn,
       signUp,
       signOut,
+      deleteAccount,
       sendPasswordReset,
     }),
-    [user, status, isConfigured, signIn, signUp, signOut, sendPasswordReset]
+    [user, status, isConfigured, signIn, signUp, signOut, deleteAccount, sendPasswordReset]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

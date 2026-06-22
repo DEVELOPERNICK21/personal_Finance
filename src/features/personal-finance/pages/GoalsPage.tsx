@@ -4,7 +4,8 @@ import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { Field } from "../components/ui/Field";
 import { SimpleProgress } from "../components/ui/ProgressBar";
-import { useFinance } from "../context/FinanceProvider";
+import { FinancialMilestonePath } from "../components/vault/FinancialRoadmap";
+import { useFinance } from "../presentation/providers/FinanceProvider";
 import { formatCurrency, formatPercent } from "../lib/format";
 import type { Goal } from "../types";
 
@@ -18,10 +19,12 @@ function newGoal(): Goal {
 }
 
 export function GoalsPage() {
-  const { data, updateData } = useFinance();
+  const { data, updateData, config } = useFinance();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      <FinancialMilestonePath data={data} basePath={config.basePath} />
+
       <div className="flex justify-end">
         <Button
           onClick={() =>

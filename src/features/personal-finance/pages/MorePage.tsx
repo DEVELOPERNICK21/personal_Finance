@@ -6,15 +6,18 @@ import {
   AlertTriangle,
   Landmark,
   LogIn,
+  Map,
   Shield,
   TrendingUp,
 } from "lucide-react";
 import { useAuth } from "../presentation/providers/AuthProvider";
 import { useFinance } from "../presentation/providers/FinanceProvider";
 import { LoginPage } from "../presentation/components/LoginPage";
+import { AccountSettings } from "../presentation/components/AccountSettings";
 import { financeHref } from "../routes";
 
 const MORE_LINKS = [
+  { slug: "roadmap" as const, label: "Financial roadmap", icon: Map },
   { slug: "accounts" as const, label: "Accounts", icon: Landmark },
   { slug: "investments" as const, label: "Investments", icon: TrendingUp },
   { slug: "insurance" as const, label: "Insurance", icon: Shield },
@@ -72,11 +75,7 @@ export function MorePage() {
         </button>
       )}
 
-      {user && (
-        <p className="text-center vault-label-sm text-[var(--vault-outline)]">
-          Signed in as {user.email}
-        </p>
-      )}
+      {user && <AccountSettings />}
     </div>
   );
 }
