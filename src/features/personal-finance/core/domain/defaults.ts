@@ -47,10 +47,32 @@ export function createEmptyFinanceData(): FinanceData {
 /** @deprecated Use createEmptyFinanceData() */
 export const DEFAULT_FINANCE_DATA: FinanceData = createEmptyFinanceData();
 
+/**
+ * Older onboarding saved the same balance to emergencyCash and a bank account.
+ * Keep the bank balance; emergency fund in a bank is not separate cash.
+ */
+function dedupeLegacyOnboardingSavings(data: FinanceData): FinanceData {
+  const banks = data.accounts.filter((a) => a.type === "bank");
+  const bankTotal = banks.reduce((sum, a) => sum + a.currentValue, 0);
+  const cash = data.assets.emergencyCash;
+
+  if (cash <= 0 || bankTotal <= 0 || cash !== bankTotal || banks.length !== 1) {
+    return data;
+  }
+
+  return {
+    ...data,
+    assets: { ...data.assets, emergencyCash: 0 },
+    accounts: data.accounts.map((a) =>
+      a.type === "bank" && a.name === "Savings" ? { ...a, name: "Emergency fund" } : a
+    ),
+  };
+}
+
 /** Merge saved user data onto empty defaults (never injects demo/sample values). */
 export function normalizeFinanceData(partial: Partial<FinanceData>): FinanceData {
   const empty = createEmptyFinanceData();
-  return {
+  const merged: FinanceData = {
     ...empty,
     ...partial,
     lastUpdated: partial.lastUpdated ?? empty.lastUpdated,
@@ -69,4 +91,5 @@ export function normalizeFinanceData(partial: Partial<FinanceData>): FinanceData
     },
     sosMode: partial.sosMode ?? false,
   };
+  return dedupeLegacyOnboardingSavings(merged);
 }
