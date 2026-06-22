@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -24,6 +24,39 @@
   --finance-input-focus: #94a3b8;
   --finance-input-ring: rgba(23, 23, 23, 0.08);
   --finance-header-chip: #ffffff;
+  --accent-teal: #1d9e75;
+  --accent-teal-muted: #9fe1cb;
+  --accent-level: #7f77dd;
+  --accent-level-muted: #c4c0ef;
+  --accent-success-brand: #639922;
+  --accent-warning-brand: #ba7517;
+  /* Vault / Stitch design tokens */
+  --vault-primary: #00694c;
+  --vault-primary-container: #008560;
+  --vault-on-primary: #ffffff;
+  --vault-on-primary-container: #f5fff7;
+  --vault-primary-dim: #68dbae;
+  --vault-primary-dark: #9fe1cb;
+  --vault-secondary: #5951b4;
+  --vault-secondary-fixed: #e4dfff;
+  --vault-secondary-container: #9f97ff;
+  --vault-on-secondary-fixed-variant: #41379b;
+  --vault-on-secondary-container: #33288d;
+  --vault-surface: #f8f9fa;
+  --vault-background: #f8f9fa;
+  --vault-on-surface: #191c1d;
+  --vault-on-surface-variant: #3d4943;
+  --vault-outline: #6d7a73;
+  --vault-outline-variant: #bccac1;
+  --vault-surface-container-lowest: #ffffff;
+  --vault-surface-container-low: #f3f4f5;
+  --vault-surface-container: #edeeef;
+  --vault-surface-container-high: #e7e8e9;
+  --vault-error: #ba1a1a;
+  --vault-tertiary: #3c6700;
+  --vault-warning: #ba7517;
+  --vault-max-width: 420px;
+  --vault-margin: 1.25rem;
 }
 
 .dark {
@@ -49,6 +82,36 @@
   --finance-input-focus: #71717a;
   --finance-input-ring: rgba(255, 255, 255, 0.1);
   --finance-header-chip: #1c1c1f;
+  --accent-teal: #9fe1cb;
+  --accent-teal-muted: #1d9e75;
+  --accent-level: #7f77dd;
+  --accent-level-muted: #3d3870;
+  --accent-success-brand: #639922;
+  --accent-warning-brand: #ba7517;
+  --vault-primary: #9fe1cb;
+  --vault-primary-container: #00694c;
+  --vault-on-primary: #002115;
+  --vault-on-primary-container: #f5fff7;
+  --vault-primary-dim: #68dbae;
+  --vault-primary-dark: #9fe1cb;
+  --vault-secondary: #9f97ff;
+  --vault-secondary-fixed: #3d3870;
+  --vault-secondary-container: #5951b4;
+  --vault-on-secondary-fixed-variant: #c4c0ef;
+  --vault-on-secondary-container: #e4dfff;
+  --vault-surface: #18181b;
+  --vault-background: #18181b;
+  --vault-on-surface: #f4f4f5;
+  --vault-on-surface-variant: #a1a1aa;
+  --vault-outline: #6d7a73;
+  --vault-outline-variant: #3f3f46;
+  --vault-surface-container-lowest: #27272a;
+  --vault-surface-container-low: #232326;
+  --vault-surface-container: #1c1c1f;
+  --vault-surface-container-high: #3f3f46;
+  --vault-error: #f87171;
+  --vault-tertiary: #9dd75a;
+  --vault-warning: #fb923c;
 }
 
 @theme inline {
@@ -66,6 +129,10 @@
   --color-brand-gray: #1a1a1a;
   --color-canvas: var(--finance-canvas);
   --color-finance-card: var(--finance-card);
+  --color-accent-teal: var(--accent-teal);
+  --color-accent-level: var(--accent-level);
+  --color-accent-success-brand: var(--accent-success-brand);
+  --color-accent-warning-brand: var(--accent-warning-brand);
   --font-sans: var(--font-geist-sans);
   --font-inter: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
@@ -97,4 +164,79 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 input[type="checkbox"] {
   accent-color: var(--accent-success);
+}
+
+/* Vault UI utilities (Stitch design system) */
+.vault-hairline {
+  border: 0.5px solid var(--vault-outline-variant);
+}
+
+.vault-card {
+  background: var(--vault-surface-container-lowest);
+  border: 0.5px solid var(--vault-outline-variant);
+  border-radius: 0.75rem;
+}
+
+.vault-label-sm {
+  font-size: 10px;
+  line-height: 14px;
+  font-weight: 500;
+}
+
+.vault-label-md {
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.vault-body-sm {
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+}
+
+.vault-body-md {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+
+.vault-body-lg {
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+
+.vault-headline-sm {
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+}
+
+.vault-headline-md {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.vault-display-lg {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.vault-journey-line {
+  position: absolute;
+  left: 11px;
+  top: 24px;
+  bottom: 0;
+  width: 1.5px;
+  background: var(--vault-outline-variant);
+}
+
+.vault-journey-line-active {
+  background: var(--vault-secondary);
 }

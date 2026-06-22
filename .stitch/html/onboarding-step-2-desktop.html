@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zenith Finance | Your Financial Standing</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-primary-container": "#f5fff7",
+                "surface-container-lowest": "#ffffff",
+                "outline-variant": "#bccac1",
+                "border-subtle": "rgba(0, 0, 0, 0.05)",
+                "inverse-primary": "#68dbae",
+                "warning-amber": "#BA7517",
+                "on-surface-variant": "#3d4943",
+                "tertiary-fixed": "#b7f473",
+                "on-primary-fixed": "#002115",
+                "secondary-fixed-dim": "#c5c0ff",
+                "on-tertiary": "#ffffff",
+                "primary-fixed": "#86f8c9",
+                "error": "#ba1a1a",
+                "on-background": "#191c1d",
+                "surface-bright": "#f8f9fa",
+                "secondary": "#5951b4",
+                "background": "#f8f9fa",
+                "outline": "#6d7a73",
+                "on-error": "#ffffff",
+                "surface-card-light": "#F9FAFB",
+                "secondary-fixed": "#e4dfff",
+                "on-surface": "#191c1d",
+                "on-secondary-fixed": "#140067",
+                "primary-container": "#008560",
+                "inverse-surface": "#2e3132",
+                "on-secondary": "#ffffff",
+                "surface-variant": "#e1e3e4",
+                "on-tertiary-fixed": "#0f2000",
+                "on-error-container": "#93000a",
+                "error-container": "#ffdad6",
+                "on-secondary-container": "#33288d",
+                "surface-container-low": "#f3f4f5",
+                "primary-dark-mode": "#9FE1CB",
+                "on-primary-fixed-variant": "#00513a",
+                "surface-dim": "#d9dadb",
+                "on-tertiary-fixed-variant": "#2d5000",
+                "tertiary": "#3c6700",
+                "on-tertiary-container": "#f9ffeb",
+                "primary": "#00694c",
+                "tertiary-fixed-dim": "#9dd75a",
+                "surface-tint": "#006c4e",
+                "primary-fixed-dim": "#68dbae",
+                "surface-container-highest": "#e1e3e4",
+                "on-secondary-fixed-variant": "#41379b",
+                "on-primary": "#ffffff",
+                "surface-container": "#edeeef",
+                "surface-card-dark": "#27272A",
+                "bg-zinc-900": "#18181B",
+                "inverse-on-surface": "#f0f1f2",
+                "surface": "#f8f9fa",
+                "surface-container-high": "#e7e8e9",
+                "secondary-container": "#9f97ff",
+                "tertiary-container": "#4e8204"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "stack-lg": "1.5rem",
+                "stack-sm": "0.5rem",
+                "gutter-grid": "1rem",
+                "stack-md": "1rem",
+                "max-width": "420px",
+                "margin-mobile": "1.25rem"
+            },
+            "fontFamily": {
+                "headline-md": ["Inter"],
+                "display-lg": ["Inter"],
+                "label-sm": ["Inter"],
+                "label-md": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-sm": ["Inter"],
+                "body-lg": ["Inter"],
+                "body-sm": ["Inter"]
+            },
+            "fontSize": {
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .vault-gradient {
+            background: linear-gradient(135deg, #00694c 0%, #008560 100%);
+        }
+        .progress-segment {
+            transition: width 1.2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container/20 overflow-x-hidden">
+<!-- TopAppBar (Based on Shared Components) -->
+<header class="fixed top-0 right-0 w-full z-40 bg-surface border-b border-border-subtle flex justify-between items-center h-16 px-8 transition-all duration-300">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">shield_person</span>
+<span class="font-headline-sm text-headline-sm text-primary font-bold tracking-tight">Zenith Finance</span>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant/30 ml-2"></div>
+<div class="flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-full border border-primary/10">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-md text-label-md text-primary uppercase tracking-wider">Secure Vault Active</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">settings</span></button>
+</div>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant/30">
+<img class="w-full h-full object-cover" data-alt="A professional corporate headshot of a financial user, centered and focused, with soft studio lighting and a clean minimalist background. The style is contemporary and trustworthy, reflecting the premium financial brand aesthetic of clarity and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtVmlCt-9DR3E254uRgS0k3CLmsD9vK1ltt1AJovMhLI9DmQFlFg-GkBH2DRTmpKii0FNWPvuV8gfEGvJYpzkdy_Bot7fdJQkOa6so9g3hxACKg9mdZhgxHuauaonesC-xNkmkPloYObsB7p-ZuPVCDdzE0WBDxw4998ySJO48_TvmE71sPnyTPbmfnvXGwabpZr39RMG_XMEvc2H6O7RdnUkQyOHUgCDZOw6uPg9VvouktpKGQMvP0TAII7zy56uRsVCQ9-mLEDk"/>
+</div>
+</div>
+</header>
+<!-- Main Content Layout -->
+<main class="pt-24 pb-12 px-8 max-w-6xl mx-auto min-h-screen flex flex-col items-center">
+<!-- Onboarding Header -->
+<div class="w-full max-w-4xl mb-12 text-center">
+<span class="font-label-md text-label-md text-primary uppercase tracking-widest mb-4 inline-block">Step 2: Analysis</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-3">Here's where you stand</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">We've analyzed your initial connections. Your financial foundation is starting to take shape in the vault.</p>
+</div>
+<!-- Desktop Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
+<!-- Left Column: Status & Runway -->
+<div class="flex flex-col gap-6">
+<!-- Status Card -->
+<div class="bg-white border-[0.5px] border-outline-variant/40 rounded-xl p-8 flex flex-col relative overflow-hidden group">
+<div class="flex justify-between items-start mb-6">
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide">Current Status</span>
+<h2 class="font-headline-md text-headline-md text-on-surface mt-1">Level 0: Initializing</h2>
+</div>
+<div class="bg-secondary/10 p-3 rounded-lg">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<div class="mt-1 flex flex-col items-center">
+<div class="w-6 h-6 rounded-full border-2 border-secondary flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-secondary animate-pulse"></div>
+</div>
+<div class="w-[2px] h-12 border-l border-dashed border-outline-variant/50"></div>
+</div>
+<div>
+<span class="font-label-md text-label-md text-secondary font-bold">In Progress</span>
+<p class="font-body-md text-body-md text-on-surface mt-1">Establishing Runway Base</p>
+</div>
+</div>
+<div class="flex items-start gap-4 opacity-50">
+<div class="mt-1">
+<div class="w-6 h-6 rounded-full border-2 border-outline-variant flex items-center justify-center"></div>
+</div>
+<div>
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Level 1</span>
+<p class="font-body-md text-body-md text-on-surface mt-1">Optimize Monthly Surplus</p>
+</div>
+</div>
+</div>
+<!-- Subtle background decoration -->
+<div class="absolute -bottom-12 -right-12 w-48 h-48 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-colors"></div>
+</div>
+<!-- Financial Runway Card -->
+<div class="bg-white border-[0.5px] border-outline-variant/40 rounded-xl p-8 flex flex-col">
+<div class="flex items-center justify-between mb-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">timer</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide">Financial Runway</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">2.3 Months</span>
+</div>
+<!-- Visual Gauge -->
+<div class="space-y-4">
+<div class="h-4 w-full bg-surface-container rounded-full overflow-hidden flex">
+<div class="progress-segment h-full bg-primary" style="width: 38%"></div>
+<div class="h-full bg-surface-container-highest w-[1px]"></div>
+</div>
+<div class="flex justify-between font-label-md text-label-md text-on-surface-variant">
+<span>0 Months</span>
+<span>3 Months</span>
+<span>6 Months+</span>
+</div>
+</div>
+<div class="mt-8 p-4 bg-primary/5 rounded-lg border border-primary/10">
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant leading-relaxed">
+<strong class="text-primary">Insight:</strong> Based on your current spending, you can survive for 2.3 months without new income. Let's aim for the 6-month safety net.
+                        </p>
+</div>
+</div>
+</div>
+<!-- Right Column: Surplus & Action -->
+<div class="flex flex-col gap-6">
+<!-- Monthly Surplus Card -->
+<div class="bg-white border-[0.5px] border-outline-variant/40 rounded-xl p-8 h-full flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<div class="flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined text-primary">account_balance_wallet</span>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wide">Monthly Surplus</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-display-lg text-display-lg text-on-surface font-bold">₹12,400</span>
+<span class="font-body-md text-body-md text-primary font-medium">/ month</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-4">
+                            This is your "Financial Breathability"—the money left after your committed expenses.
+                        </p>
+</div>
+<!-- Visual Graph Placeholder (Minimalist) -->
+<div class="mt-8 h-40 flex items-end gap-2 relative z-10">
+<div class="flex-1 bg-primary/20 rounded-t h-[40%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[60%]"></div>
+<div class="flex-1 bg-primary/20 rounded-t h-[30%]"></div>
+<div class="flex-1 bg-primary/40 rounded-t h-[70%]"></div>
+<div class="flex-1 bg-primary h-[85%] relative">
+<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-on-primary-fixed text-white font-label-sm text-label-sm px-2 py-1 rounded">Current</div>
+</div>
+</div>
+<!-- Background Atmospheric Shader (Abstract Minimalist) -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none">
+
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="mt-16 w-full max-w-xl flex flex-col items-center gap-6">
+<button class="w-full py-4 bg-primary text-white rounded-xl font-headline-sm text-headline-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 hover:shadow-primary/30 transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3" onclick="window.location.reload()">
+<span>Add Details to reach Level 1</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<div class="flex flex-col items-center gap-2">
+<a class="font-label-md text-label-md text-on-surface-variant hover:text-primary transition-colors underline underline-offset-4 decoration-outline-variant/40" href="#">Skip for now, I'll explore first</a>
+<div class="flex items-center gap-2 text-on-surface-variant/40 mt-4">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+<span class="font-label-sm text-label-sm uppercase tracking-tighter">Your data is encrypted with AES-256 at rest</span>
+</div>
+</div>
+</div>
+</main>
+<!-- Interactivity Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate progress bar on load
+            const progress = document.querySelector('.progress-segment');
+            if (progress) {
+                setTimeout(() => {
+                    progress.style.width = '38.3%';
+                }, 300);
+            }
+
+            // Mouse parallax effect for the cards (subtle)
+            document.querySelectorAll('.bg-white').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = (y - centerY) / 50;
+                    const rotateY = (centerX - x) / 50;
+                    
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                });
+                
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'none';
+                });
+            });
+        });
+    </script>
+</body></html>

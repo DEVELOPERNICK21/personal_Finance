@@ -2,366 +2,310 @@
 
 import Link from "next/link";
 import {
-  ArrowRight,
   Calendar,
-  HandCoins,
+  Check,
+  ChevronRight,
   Landmark,
   Shield,
-  Target,
-  TrendingUp,
+  Upload,
+  Users,
   Wallet,
-  AlertTriangle,
+  Zap,
 } from "lucide-react";
-import { DashCard } from "../components/ui/DashCard";
-import { StatCard } from "../components/ui/StatCard";
-import { SimpleProgress } from "../components/ui/ProgressBar";
 import { useFinance } from "../presentation/providers/FinanceProvider";
 import { financeHref } from "../routes";
 import {
-  formatCompactCurrency,
-  formatCurrency,
-  formatPercent,
-  formatShortDate,
-} from "../lib/format";
-
-const QUICK_LINKS = [
-  { slug: "accounts" as const, label: "Accounts", desc: "Banks & balances", icon: Landmark },
-  { slug: "monthly" as const, label: "Monthly Money", desc: "Income & spending", icon: Wallet },
-  { slug: "investments" as const, label: "Investments", desc: "Portfolio value", icon: TrendingUp },
-  { slug: "goals" as const, label: "Goals", desc: "Savings targets", icon: Target },
-  { slug: "insurance" as const, label: "Insurance", desc: "Policies & renewals", icon: Shield },
-  { slug: "emergency" as const, label: "Emergency", desc: "SOS & contacts", icon: AlertTriangle },
-];
-
-const CHECKLIST_ITEMS = [
-  { key: "verifyBankLogs", label: "Verify bank balances" },
-  { key: "confirmSipClearance", label: "Confirm SIP cleared" },
-  { key: "verifyBurnUnder30k", label: "Monthly burn under cap" },
-  { key: "auditPolicyDates", label: "Check policy renewals" },
-];
+  deriveCurrentLevel,
+  getJourneySteps,
+  getMonthlySpend,
+  hasLevel0Inputs,
+  countActiveSips,
+  monthlySipTotal,
+} from "../core/domain/levels";
+import { formatCurrency, formatShortDate } from "../lib/format";
 
 export function DashboardPage() {
-  const { data, metrics, config, updateData, commitReview, toggleSosMode } = useFinance();
+  const { data, metrics, config } = useFinance();
   const base = config.basePath;
-
-  if (data.sosMode) {
-    return (
-      <div className="mx-auto max-w-2xl">
-        <DashCard title="SOS Emergency View" subtitle="Critical info for your family">
-          <dl className="space-y-4 text-sm">
-            {[
-              ["Salary account", data.instructions.salaryAccount],
-              ["Investments", data.instructions.investmentLocations],
-              ["Insurance claims", data.instructions.insuranceClaimSteps],
-              ["Contact first", data.instructions.firstContact],
-              ["Emergency cash", formatCurrency(data.assets.emergencyCash)],
-              ["Vault location", data.assets.vaultLocation],
-            ].map(([label, value]) => (
-              <div key={label} className="rounded-2xl bg-[var(--finance-subtle)] px-4 py-3">
-                <dt className="text-xs font-medium text-muted">{label}</dt>
-                <dd className="mt-1 font-medium text-foreground">{value || "—"}</dd>
-              </div>
-            ))}
-          </dl>
-          <button
-            type="button"
-            onClick={toggleSosMode}
-            className="mt-6 w-full rounded-2xl bg-[#171717] py-3 text-sm font-semibold text-white hover:bg-[#171717]/90"
-          >
-            Exit SOS view
-          </button>
-        </DashCard>
-      </div>
-    );
-  }
-
-  const monthlyLeftPositive = metrics.monthlyRemaining >= 0;
-  const emergencyTrend =
-    metrics.emergencyFundProgress >= 100
-      ? { value: "Target reached", positive: true }
-      : { value: `${Math.round(metrics.emergencyFundProgress)}% funded`, positive: metrics.emergencyFundProgress >= 50 };
+  const level = deriveCurrentLevel(data);
+  const journey = getJourneySteps(data);
+  const monthlySpend = getMonthlySpend(data);
+  const income = data.monthly.income;
+  const spentPercent = income > 0 ? Math.round((monthlySpend / income) * 100) : 0;
+  const sipCount = countActiveSips(data);
+  const sipMonthly = monthlySipTotal(data);
+  const runwayGoal = 6;
+  const runwayProgress = Math.min(100, (metrics.survivalRunwayMonths / runwayGoal) * 100);
+  const showLevelNudge = !hasLevel0Inputs(data);
 
   return (
-    <div className="grid gap-6 xl:grid-cols-[1fr_320px]">
-      <div className="space-y-6">
-        {/* Top stats */}
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <StatCard
-            icon={Wallet}
-            label="Net worth"
-            value={formatCompactCurrency(metrics.netWorth)}
-          />
-          <StatCard
-            icon={HandCoins}
-            label="Owed to you"
-            value={formatCompactCurrency(metrics.totalReceivables)}
-            trend={
-              metrics.totalReceivables > 0
-                ? { value: "Pending repayment", positive: true }
-                : undefined
-            }
-          />
-          <StatCard
-            icon={Target}
-            label="Emergency fund"
-            value={formatPercent(metrics.emergencyFundProgress)}
-            trend={emergencyTrend}
-          />
-          <StatCard
-            icon={Calendar}
-            label="Savings rate"
-            value={formatPercent(metrics.savingsRate)}
-            trend={{
-              value: monthlyLeftPositive ? "On track" : "Over budget",
-              positive: monthlyLeftPositive,
-            }}
-          />
-        </div>
+    <div className="space-y-6">
+      {/* Level 0 nudge */}
+      {showLevelNudge && (
+        <Link
+          href={financeHref(base, "monthly")}
+          className="flex w-full items-center justify-between gap-2 rounded-xl border border-[var(--vault-secondary)] bg-[var(--vault-secondary-fixed)] p-4 text-left vault-label-md text-[var(--vault-on-secondary-fixed-variant)] transition-transform active:scale-95"
+        >
+          <span>Add 3 numbers to see your full picture →</span>
+          <Zap className="h-4 w-4 shrink-0" />
+        </Link>
+      )}
 
-        {/* Middle row */}
-        <div className="grid gap-4 lg:grid-cols-2">
-          <DashCard title="Monthly cash flow" subtitle="Income vs what you spend & save">
-            <div className="space-y-4">
-              <FlowRow label="Income" amount={metrics.monthlyIncome} max={metrics.monthlyIncome} color="bg-foreground" />
-              <FlowRow
-                label="Expenses"
-                amount={metrics.monthlyExpenses}
-                max={metrics.monthlyIncome}
-                color="bg-rose-400"
-              />
-              <FlowRow
-                label="Savings & SIPs"
-                amount={metrics.monthlySavings}
-                max={metrics.monthlyIncome}
-                color="bg-emerald-500"
-              />
-              <div className="mt-2 flex items-center justify-between rounded-2xl bg-[var(--finance-subtle)] px-4 py-3">
-                <span className="text-sm text-muted">Left after plan</span>
-                <span
-                  className={`text-lg font-semibold ${
-                    monthlyLeftPositive ? "text-emerald-700" : "text-rose-600"
-                  }`}
-                >
-                  {formatCurrency(metrics.monthlyRemaining)}
-                </span>
-              </div>
-            </div>
-          </DashCard>
-
-          <DashCard title="Salary split" subtitle="Where each paycheck goes">
-            <div className="space-y-5">
-              <SplitBar
-                label="Fixed costs"
-                percent={metrics.salaryAllocation.fixed}
-                color="bg-foreground"
-              />
-              <SplitBar
-                label="Lifestyle"
-                percent={metrics.salaryAllocation.wants}
-                color="bg-amber-400"
-              />
-              <SplitBar
-                label="Saved"
-                percent={metrics.salaryAllocation.saved}
-                color="bg-emerald-500"
-              />
-              <div className="grid grid-cols-2 gap-3 pt-2">
-                <MiniStat label="Runway" value={`${metrics.survivalRunwayMonths.toFixed(1)} mo`} />
-                <MiniStat label="Cash on hand" value={formatCompactCurrency(metrics.cashAvailable)} />
-              </div>
-            </div>
-          </DashCard>
-        </div>
-
-        {/* Quick links */}
-        <DashCard title="Go deeper" subtitle="Edit details on each page">
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {QUICK_LINKS.map((link) => (
-              <Link
-                key={link.slug}
-                href={financeHref(base, link.slug)}
-                className="group flex items-center gap-3 rounded-2xl border border-border bg-[var(--finance-subtle)]/60 p-4 transition-colors hover:bg-[var(--finance-subtle)]"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[var(--finance-card)]">
-                  <link.icon className="h-5 w-5 text-foreground" strokeWidth={1.75} />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-foreground">{link.label}</p>
-                  <p className="text-xs text-muted">{link.desc}</p>
-                </div>
-                <ArrowRight className="h-4 w-4 shrink-0 text-muted/40 group-hover:text-muted" />
-              </Link>
-            ))}
+      {/* Hero: Net worth & runway */}
+      <section className="vault-card p-5">
+        <p className="vault-label-md mb-1 text-[var(--vault-on-surface-variant)]">Total Net Worth</p>
+        <h1 className="vault-display-lg mb-6 text-[var(--vault-on-surface)]">
+          {formatCurrency(metrics.netWorth)}
+        </h1>
+        <div className="space-y-3">
+          <div className="flex items-end justify-between">
+            <span className="vault-label-md italic text-[var(--vault-on-surface-variant)]">
+              {monthlySpend > 0
+                ? `${metrics.survivalRunwayMonths.toFixed(1)} months if income stops`
+                : "Add expenses to see runway"}
+            </span>
+            <span className="vault-label-sm text-[var(--vault-primary)]">Target: 6m</span>
           </div>
-        </DashCard>
-      </div>
-
-      {/* Right rail */}
-      <aside className="space-y-4">
-        <DashCard dark title="Emergency fund" subtitle="Protection pool progress">
-          <p className="text-3xl font-semibold">{formatPercent(metrics.emergencyFundProgress)}</p>
-          <div className="mt-4">
-            <SimpleProgress percent={metrics.emergencyFundProgress} color="bg-white" />
+          <div className="relative h-2 w-full overflow-hidden rounded-full bg-[var(--vault-surface-container-high)]">
+            <div
+              className="absolute left-0 top-0 h-full rounded-full bg-[var(--vault-primary)] transition-all duration-700"
+              style={{ width: `${runwayProgress}%` }}
+            />
           </div>
-          <p className="mt-3 text-sm text-white/50">
-            {metrics.emergencyFundDeficit > 0
-              ? `${formatCurrency(metrics.emergencyFundDeficit)} to go · ~${metrics.emergencyFundMonthsToTarget} months at current pace`
-              : "You've hit your emergency target. Well done."}
-          </p>
-          <Link
-            href={financeHref(base, "goals")}
-            className="mt-5 flex w-full items-center justify-center rounded-2xl bg-white py-3 text-sm font-semibold text-[#171717] hover:bg-white/90"
-          >
-            View goals
-          </Link>
-        </DashCard>
+          <div className="flex justify-between vault-label-sm text-[var(--vault-outline)]">
+            <span>0m</span>
+            <span>2m</span>
+            <span>4m</span>
+            <span>6m</span>
+          </div>
+        </div>
+      </section>
 
-        <DashCard title="Month-end checklist" subtitle="Quick review tasks">
-          <ul className="space-y-3">
-            {CHECKLIST_ITEMS.map((item) => (
-              <li key={item.key} className="flex items-start gap-3">
-                <input
-                  type="checkbox"
-                  checked={data.monthEndChecklist[item.key] ?? false}
-                  onChange={(e) =>
-                    updateData((d) => ({
-                      ...d,
-                      monthEndChecklist: {
-                        ...d.monthEndChecklist,
-                        [item.key]: e.target.checked,
-                      },
-                    }))
-                  }
-                  className="mt-0.5 h-4 w-4 rounded border-[#171717]/20"
+      {/* This month grid */}
+      <section>
+        <div className="grid grid-cols-2 gap-3">
+          <StatTile label="Income" value={formatCurrency(income)} valueClass="text-[var(--vault-primary)]" />
+          <StatTile label="Spent" value={formatCurrency(monthlySpend)} valueClass="text-[var(--vault-error)]" />
+          <StatTile
+            label="Remaining"
+            value={formatCurrency(Math.max(0, metrics.monthlyRemaining))}
+          />
+          <StatTile
+            label="SIPs running"
+            value={sipCount > 0 || sipMonthly > 0 ? `${sipCount || 1} active` : "None yet"}
+            valueClass="text-[var(--vault-secondary)]"
+            sub={sipMonthly > 0 ? `${formatCurrency(sipMonthly)}/mo` : undefined}
+          />
+          {income > 0 && monthlySpend > 0 && (
+            <p className="col-span-2 vault-label-sm text-[var(--vault-on-surface-variant)]">
+              {spentPercent}% of income spent this month
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* Journey */}
+      <section className="rounded-xl border border-[var(--vault-outline-variant)] bg-[var(--vault-surface-container-low)] p-5">
+        <h2 className="vault-headline-sm mb-6">Financial Journey</h2>
+        <div className="relative space-y-8">
+          {journey.map((step, i) => (
+            <div key={step.level} className="relative flex gap-4">
+              {i < journey.length - 1 && (
+                <div
+                  className={`vault-journey-line ${step.status === "done" ? "vault-journey-line-active" : ""}`}
                 />
-                <span className="text-sm text-foreground">{item.label}</span>
+              )}
+              <JourneyDot status={step.status} level={step.level} />
+              <div className="min-w-0 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p
+                      className={`vault-label-md ${
+                        step.status === "now"
+                          ? "font-semibold text-[var(--vault-secondary)]"
+                          : step.status === "done"
+                            ? "text-[var(--vault-on-surface)]"
+                            : "text-[var(--vault-outline)]"
+                      }`}
+                    >
+                      {step.title}
+                    </p>
+                    <p className="vault-label-sm text-[var(--vault-on-surface-variant)]">
+                      {step.description}
+                    </p>
+                  </div>
+                  <StatusPill status={step.status} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Level 1+: renewing soon */}
+      {level >= 1 && (
+        <section className="relative overflow-hidden rounded-2xl border border-[var(--vault-secondary-container)]/30 bg-[var(--vault-secondary-container)]/20 p-5">
+          <h4 className="vault-headline-sm mb-1 text-[var(--vault-on-secondary-container)]">
+            What&apos;s renewing soon?
+          </h4>
+          {metrics.nextInsuranceRenewal ? (
+            <div className="mt-3 flex items-center gap-3 rounded-lg border border-[var(--vault-secondary-container)]/30 bg-[var(--vault-surface-container-lowest)]/80 p-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded bg-[var(--vault-secondary)]/10 text-[var(--vault-secondary)]">
+                <Shield className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <p className="vault-label-md">{metrics.nextInsuranceRenewal.name}</p>
+                <p className="vault-label-sm text-[var(--vault-error)]">
+                  {formatShortDate(metrics.nextInsuranceRenewal.date)}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <p className="vault-body-sm text-[var(--vault-on-secondary-container)]/80">
+              No renewals tracked yet — add an insurance policy.
+            </p>
+          )}
+          <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-[var(--vault-secondary)]/10 blur-2xl" />
+        </section>
+      )}
+
+      {/* Quick actions */}
+      <section>
+        <h3 className="vault-headline-sm mb-3">Quick actions</h3>
+        {level === 0 ? (
+          <div className="grid grid-cols-2 gap-3">
+            <QuickActionCard
+              href={financeHref(base, "monthly")}
+              icon={Calendar}
+              label="Set monthly budget"
+            />
+            <QuickActionCard
+              href={financeHref(base, "accounts")}
+              icon={Landmark}
+              label="Add bank account"
+            />
+          </div>
+        ) : (
+          <ul className="divide-y divide-[var(--vault-outline-variant)]/50 overflow-hidden rounded-xl border border-[var(--vault-outline-variant)] bg-[var(--vault-surface-container-lowest)]">
+            {getListActions(level, data, base).map((action) => (
+              <li key={action.label}>
+                <Link
+                  href={action.href}
+                  className="flex items-center gap-3 px-4 py-3.5 transition-colors hover:bg-[var(--vault-surface-container-low)]"
+                >
+                  <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--vault-outline-variant)]">
+                    <action.icon className="h-4 w-4 text-[var(--vault-on-surface-variant)]" strokeWidth={1.75} />
+                  </span>
+                  <span className="flex-1 vault-body-sm">{action.label}</span>
+                  <span className="vault-label-sm text-[var(--vault-outline)]">{action.meta}</span>
+                  <ChevronRight className="h-4 w-4 text-[var(--vault-outline)]/50" />
+                </Link>
               </li>
             ))}
           </ul>
-          <button
-            type="button"
-            onClick={commitReview}
-            className="mt-5 w-full rounded-2xl border border-border py-2.5 text-sm font-medium hover:bg-[var(--finance-subtle)]"
-          >
-            Mark review complete
-          </button>
-        </DashCard>
-
-        <DashCard title="Coming up" subtitle="Dates to watch">
-          <ul className="space-y-4">
-            {metrics.nextInsuranceRenewal && (
-              <UpcomingItem
-                title={metrics.nextInsuranceRenewal.name}
-                date={formatShortDate(metrics.nextInsuranceRenewal.date)}
-                dot="bg-amber-400"
-              />
-            )}
-            {metrics.nextSipDate && (
-              <UpcomingItem
-                title="Next SIP date"
-                date={formatShortDate(metrics.nextSipDate)}
-                dot="bg-emerald-500"
-              />
-            )}
-            {metrics.nextReceivableReturn && (
-              <UpcomingItem
-                title={`${metrics.nextReceivableReturn.borrowerName} repayment`}
-                date={`${formatShortDate(metrics.nextReceivableReturn.date)} · ${formatCurrency(metrics.nextReceivableReturn.amount)}`}
-                dot="bg-sky-500"
-              />
-            )}
-            {!metrics.nextInsuranceRenewal &&
-              !metrics.nextSipDate &&
-              !metrics.nextReceivableReturn && (
-              <p className="text-sm text-muted">No upcoming dates — add loans or insurance to track.</p>
-            )}
-          </ul>
-        </DashCard>
-
-        <button
-          type="button"
-          onClick={toggleSosMode}
-          className="w-full rounded-3xl border border-rose-200 bg-rose-50 px-5 py-4 text-left text-sm font-medium text-rose-800 hover:bg-rose-100 dark:border-rose-900/50 dark:bg-rose-950/40 dark:text-rose-200 dark:hover:bg-rose-950/60"
-        >
-          Open SOS emergency view
-        </button>
-      </aside>
+        )}
+      </section>
     </div>
   );
 }
 
-function FlowRow({
+function StatTile({
   label,
-  amount,
-  max,
-  color,
+  value,
+  valueClass = "text-[var(--vault-on-surface)]",
+  sub,
 }: {
   label: string;
-  amount: number;
-  max: number;
-  color: string;
+  value: string;
+  valueClass?: string;
+  sub?: string;
 }) {
-  const width = max > 0 ? Math.min(100, (amount / max) * 100) : 0;
   return (
-    <div>
-      <div className="mb-1.5 flex justify-between text-sm">
-        <span className="text-muted">{label}</span>
-        <span className="font-medium text-foreground">{formatCurrency(amount)}</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-[var(--finance-subtle)]">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${width}%` }} />
-      </div>
+    <div className="vault-card flex flex-col justify-between p-4">
+      <span className="vault-label-sm text-[var(--vault-on-surface-variant)]">{label}</span>
+      <span className={`vault-body-lg ${valueClass}`}>{value}</span>
+      {sub && <span className="vault-label-sm text-[var(--vault-outline)]">{sub}</span>}
     </div>
   );
 }
 
-function SplitBar({
+function JourneyDot({
+  status,
+  level,
+}: {
+  status: "done" | "now" | "next" | "later";
+  level: number;
+}) {
+  if (status === "done") {
+    return (
+      <span className="z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[var(--vault-secondary)] text-[var(--vault-on-secondary)]">
+        <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
+      </span>
+    );
+  }
+  if (status === "now") {
+    return (
+      <span className="z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-[var(--vault-secondary)] bg-[var(--vault-surface)]">
+        <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--vault-secondary)]" />
+      </span>
+    );
+  }
+  return (
+    <span className="z-10 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-dashed border-[var(--vault-outline-variant)] text-[10px] text-[var(--vault-outline)]">
+      {level}
+    </span>
+  );
+}
+
+function StatusPill({ status }: { status: "done" | "now" | "next" | "later" }) {
+  const map = {
+    done: "bg-[var(--vault-tertiary)]/15 text-[var(--vault-tertiary)]",
+    now: "bg-[var(--vault-secondary)]/15 text-[var(--vault-secondary)]",
+    next: "bg-[var(--vault-surface-container-high)] text-[var(--vault-outline)]",
+    later: "bg-[var(--vault-surface-container-high)] text-[var(--vault-outline)]",
+  };
+  const labels = { done: "Done", now: "Now", next: "Next", later: "Later" };
+  return (
+    <span className={`shrink-0 rounded-full px-2 py-0.5 vault-label-sm ${map[status]}`}>
+      {labels[status]}
+    </span>
+  );
+}
+
+function QuickActionCard({
+  href,
+  icon: Icon,
   label,
-  percent,
-  color,
 }: {
+  href: string;
+  icon: typeof Calendar;
   label: string;
-  percent: number;
-  color: string;
 }) {
   return (
-    <div>
-      <div className="mb-1.5 flex justify-between text-sm">
-        <span className="text-muted">{label}</span>
-        <span className="font-medium text-foreground">{Math.round(percent)}%</span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-[var(--finance-subtle)]">
-        <div className={`h-full rounded-full ${color}`} style={{ width: `${Math.min(100, percent)}%` }} />
-      </div>
-    </div>
+    <Link
+      href={href}
+      className="flex flex-col items-start gap-3 rounded-xl bg-[var(--vault-primary)] p-4 text-[var(--vault-on-primary)] transition-opacity hover:opacity-90 active:scale-95"
+    >
+      <Icon className="h-5 w-5" strokeWidth={1.75} />
+      <span className="vault-label-md text-left">{label}</span>
+    </Link>
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl bg-[var(--finance-subtle)] px-4 py-3">
-      <p className="text-xs text-muted">{label}</p>
-      <p className="mt-0.5 text-lg font-semibold text-foreground">{value}</p>
-    </div>
-  );
-}
-
-function UpcomingItem({
-  title,
-  date,
-  dot,
-}: {
-  title: string;
-  date: string;
-  dot: string;
-}) {
-  return (
-    <li className="flex items-center gap-3">
-      <span className={`h-2 w-2 shrink-0 rounded-full ${dot}`} />
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-foreground">{title}</p>
-        <p className="text-xs text-muted">{date}</p>
-      </div>
-    </li>
-  );
+function getListActions(
+  level: number,
+  data: ReturnType<typeof useFinance>["data"],
+  base: string
+) {
+  if (level === 1) {
+    return [
+      { label: "Add insurance policy", href: financeHref(base, "insurance"), icon: Shield, meta: "Level 1" },
+      { label: "Upload documents", href: financeHref(base, "documents"), icon: Upload, meta: `${data.documents.length} added` },
+      { label: "Emergency contacts", href: financeHref(base, "emergency"), icon: Users, meta: data.contacts.length > 0 ? `${data.contacts.length} set` : "Not set" },
+    ];
+  }
+  return [
+    { label: "Top up emergency fund", href: financeHref(base, "goals"), icon: Wallet, meta: "Level 2" },
+    { label: "Check runway goal", href: financeHref(base, "goals"), icon: Wallet, meta: "6 month target" },
+  ];
 }

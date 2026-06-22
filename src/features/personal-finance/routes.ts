@@ -7,6 +7,7 @@ export const FINANCE_ROUTES = [
   { slug: "insurance", label: "Insurance", icon: "🛡️" },
   { slug: "documents", label: "Documents", icon: "📄" },
   { slug: "emergency", label: "Emergency Info", icon: "☎" },
+  { slug: "more", label: "More", icon: "⋯" },
 ] as const;
 
 export type FinanceRouteSlug = (typeof FINANCE_ROUTES)[number]["slug"];

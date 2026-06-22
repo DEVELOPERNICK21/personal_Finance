@@ -8,6 +8,7 @@ import {
   FileText,
   Landmark,
   LayoutDashboard,
+  MoreHorizontal,
   Phone,
   Settings,
   Shield,
@@ -27,6 +28,7 @@ const ROUTE_ICONS: Record<FinanceRouteSlug, typeof LayoutDashboard> = {
   insurance: Shield,
   documents: FileText,
   emergency: Phone,
+  more: MoreHorizontal,
 };
 
 export function FinanceSidebar() {

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zenith Finance | Level 1 Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .security-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(104, 219, 174, 0.1), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s infinite linear;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 0.5px solid rgba(0, 0, 0, 0.05);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#68dbae",
+                      "inverse-primary": "#68dbae",
+                      "on-tertiary-fixed-variant": "#2d5000",
+                      "border-subtle": "rgba(0, 0, 0, 0.05)",
+                      "on-secondary-fixed-variant": "#41379b",
+                      "on-secondary-fixed": "#140067",
+                      "on-primary-fixed-variant": "#00513a",
+                      "inverse-surface": "#2e3132",
+                      "on-primary-container": "#f5fff7",
+                      "secondary": "#5951b4",
+                      "outline-variant": "#bccac1",
+                      "surface-container-low": "#f3f4f5",
+                      "outline": "#6d7a73",
+                      "on-secondary-container": "#33288d",
+                      "tertiary-fixed": "#b7f473",
+                      "on-surface-variant": "#3d4943",
+                      "on-background": "#191c1d",
+                      "primary-fixed": "#86f8c9",
+                      "surface-card-light": "#F9FAFB",
+                      "on-primary": "#ffffff",
+                      "warning-amber": "#BA7517",
+                      "secondary-container": "#9f97ff",
+                      "primary-container": "#008560",
+                      "on-primary-fixed": "#002115",
+                      "surface-container": "#edeeef",
+                      "surface-variant": "#e1e3e4",
+                      "secondary-fixed": "#e4dfff",
+                      "background": "#f8f9fa",
+                      "surface-container-highest": "#e1e3e4",
+                      "on-tertiary-container": "#f9ffeb",
+                      "tertiary-container": "#4e8204",
+                      "error": "#ba1a1a",
+                      "tertiary-fixed-dim": "#9dd75a",
+                      "surface": "#f8f9fa",
+                      "on-tertiary": "#ffffff",
+                      "surface-card-dark": "#27272A",
+                      "on-error": "#ffffff",
+                      "on-surface": "#191c1d",
+                      "surface-dim": "#d9dadb",
+                      "primary-dark-mode": "#9FE1CB",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-fixed": "#0f2000",
+                      "on-secondary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "surface-tint": "#006c4e",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-on-surface": "#f0f1f2",
+                      "surface-bright": "#f8f9fa",
+                      "bg-zinc-900": "#18181B",
+                      "primary": "#00694c",
+                      "tertiary": "#3c6700",
+                      "secondary-fixed-dim": "#c5c0ff",
+                      "surface-container-high": "#e7e8e9"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "headline-md": ["Inter"]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md">
+<!-- Sidebar Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-border-subtle flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="font-headline-sm text-headline-sm text-primary font-bold">Zenith Finance</h1>
+<p class="font-label-md text-label-md text-on-surface-variant opacity-70">Secure Vault Active</p>
+</div>
+<nav class="flex-grow">
+<!-- Active: Home -->
+<a class="flex items-center gap-3 px-6 py-3 text-primary font-bold border-r-4 border-primary bg-primary-container/10 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-body-md text-body-md">Money</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="ads_click">ads_click</span>
+<span class="font-body-md text-body-md">Goals</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="font-body-md text-body-md">Docs</span>
+</a>
+<a class="flex items-center gap-3 px-6 py-3 text-on-surface-variant hover:text-primary hover:bg-surface-container-high transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="more_horiz">more_horiz</span>
+<span class="font-body-md text-body-md">More</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full py-3 px-4 bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="lock" style="font-variation-settings: 'FILL' 1;">lock</span>
+                Lock Vault
+            </button>
+</div>
+</aside>
+<!-- Top App Bar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface border-b border-border-subtle flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-2 px-3 py-1 bg-primary-container/10 border border-primary/20 rounded-full">
+<span class="material-symbols-outlined text-primary text-[16px]" data-icon="verified_user" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-primary font-label-md text-label-md">E2EE Protected</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="notifications">notifications</span>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-error rounded-full"></span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors" data-icon="settings">settings</span>
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a middle-aged South Asian male business executive, smiling warmly, with a clean corporate office background in soft focus. The aesthetic is bright and light-mode compatible, featuring high-quality photography with soft, natural lighting that emphasizes a trustworthy and successful persona." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcW_S4vnMLRtLYTGRcgzHaiZzd0FtvEh-A-bfx1VR4aWmZdDDOlMeN6FQKQaiT97dqrlOoFV6_tzzEC4oF03WGJA2waLSTVAPFzYenCQOpp2ImnMqiywfUc8QwwA8J6P4eDM5Yrzp3JvWKBL23LyiItKjPL9x2RxtXVHsBqKPk39Iex5yegDZWMQjGszvAZiFm21vyy9piERKTYzxZUvnBbkOgg9XeETKrdDqDAHMgtAZ6XKLxHEOilwULM1Pza51_bam3QbF6JhQ"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 max-w-[1200px]">
+<!-- Hero Metrics Row -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Net Worth Card -->
+<div class="col-span-12 lg:col-span-7 bg-surface-container-lowest border border-border-subtle p-8 rounded-xl relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 security-shimmer"></div>
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="font-label-md text-label-md text-on-surface-variant mb-1 uppercase tracking-wider">Total Net Worth</h2>
+<p class="font-display-lg text-display-lg font-extrabold text-primary">₹ 1,42,85,200</p>
+</div>
+<div class="flex items-center gap-1 text-tertiary font-label-md">
+<span class="material-symbols-outlined text-[18px]" data-icon="trending_up">trending_up</span>
+<span>+4.2% this month</span>
+</div>
+</div>
+<div class="h-32 flex items-end gap-2 w-full">
+<!-- Simple Asymmetric Bar Chart -->
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[40%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[55%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[45%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[70%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[65%]"></div>
+<div class="flex-1 bg-primary-container/20 rounded-t-sm h-[85%]"></div>
+<div class="flex-1 bg-primary rounded-t-sm h-[100%]"></div>
+</div>
+</div>
+<!-- Runway Card -->
+<div class="col-span-12 lg:col-span-5 bg-surface-container-lowest border border-border-subtle p-8 rounded-xl flex flex-col justify-between">
+<div>
+<h2 class="font-label-md text-label-md text-on-surface-variant mb-4 uppercase tracking-wider">Financial Runway</h2>
+<p class="font-headline-md text-headline-md font-bold mb-2">18 Months Survival</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Based on your current monthly burn rate of ₹ 1,20,000.</p>
+</div>
+<div class="mt-6">
+<div class="h-4 w-full bg-surface-variant rounded-full overflow-hidden flex">
+<div class="h-full bg-primary" style="width: 75%;"></div>
+</div>
+<div class="flex justify-between mt-2 font-label-sm text-label-sm text-outline">
+<span>0 Months</span>
+<span>Goal: 24 Months</span>
+</div>
+</div>
+<div class="mt-6 flex items-center gap-3 p-3 bg-secondary-container/10 border border-secondary/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="lightbulb">lightbulb</span>
+<p class="font-label-md text-label-md text-on-secondary-container">Add ₹ 2L to reach your 2-year safety net goal.</p>
+</div>
+</div>
+</div>
+<!-- Middle Section: Financial Protection & Cash Flow -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<!-- Left: Financial Protection Section -->
+<div class="col-span-12 lg:col-span-8">
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-headline-sm text-headline-sm font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+                        Financial Protection
+                    </h2>
+<button class="text-primary font-label-md hover:underline">View Policy Details</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<!-- Insurance Sub-section (Bento) -->
+<div class="space-y-4">
+<div class="bg-white border border-border-subtle p-4 rounded-lg flex items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded bg-primary-container/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="timer">timer</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-label-md text-label-md font-bold">Term Insurance</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">₹ 2 Cr Cover • HDFC Life</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-white border border-border-subtle p-4 rounded-lg flex items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded bg-tertiary-container/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined" data-icon="medical_services">medical_services</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-label-md text-label-md font-bold">Health Insurance</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">₹ 15L Base + Super Topup</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+<div class="bg-white border border-border-subtle p-4 rounded-lg flex items-center gap-4 hover:bg-surface-container-low transition-colors cursor-pointer group">
+<div class="w-10 h-10 rounded bg-secondary-container/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" data-icon="directions_car">directions_car</span>
+</div>
+<div class="flex-grow">
+<h3 class="font-label-md text-label-md font-bold">Vehicle Insurance</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Comprehensive • KA 01 MX 1234</p>
+</div>
+<span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="chevron_right">chevron_right</span>
+</div>
+</div>
+<!-- Documents Sub-section (Bento) -->
+<div class="bg-surface-container-low p-6 rounded-xl">
+<h3 class="font-label-md text-label-md font-bold mb-4 uppercase text-outline">Vault Documents</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-white rounded border border-border-subtle">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="badge">badge</span>
+<span class="font-body-sm text-body-sm">PAN Card</span>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-white rounded border border-border-subtle">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="fingerprint">fingerprint</span>
+<span class="font-body-sm text-body-sm">Aadhaar Card</span>
+</div>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-white rounded border border-border-subtle">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="history_edu">history_edu</span>
+<span class="font-body-sm text-body-sm">Digital Will</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 bg-warning-amber/10 text-warning-amber rounded">Update Req.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right: Monthly Cash Flow -->
+<div class="col-span-12 lg:col-span-4 flex flex-col gap-6">
+<div class="bg-white border border-border-subtle p-6 rounded-xl flex-grow">
+<h2 class="font-label-md text-label-md font-bold mb-6 uppercase tracking-wider">Monthly Cash Flow</h2>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-2 h-8 bg-tertiary rounded-full"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Inflow</p>
+<p class="font-body-lg text-body-lg font-bold">₹ 2,45,000</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-tertiary" data-icon="arrow_downward">arrow_downward</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex items-center gap-3">
+<div class="w-2 h-8 bg-error rounded-full"></div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Outflow</p>
+<p class="font-body-lg text-body-lg font-bold">₹ 1,20,000</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-error" data-icon="arrow_upward">arrow_upward</span>
+</div>
+<div class="pt-6 border-t border-border-subtle">
+<div class="flex justify-between mb-2">
+<span class="font-label-md text-label-md">Savings Rate</span>
+<span class="font-label-md text-label-md font-bold text-primary">51%</span>
+</div>
+<div class="h-2 w-full bg-surface-variant rounded-full overflow-hidden">
+<div class="h-full bg-primary" style="width: 51%;"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Renewing Soon Card -->
+<div class="bg-warning-amber/5 border border-warning-amber/20 p-6 rounded-xl relative overflow-hidden group hover:shadow-lg transition-shadow duration-300">
+<div class="absolute top-0 right-0 w-24 h-24 -mr-8 -mt-8 bg-warning-amber/10 rounded-full blur-2xl"></div>
+<div class="flex items-center gap-2 mb-3">
+<span class="material-symbols-outlined text-warning-amber" data-icon="event_upcoming" style="font-variation-settings: 'FILL' 1;">event_upcoming</span>
+<h3 class="font-label-md text-label-md font-bold text-warning-amber uppercase">What's renewing soon?</h3>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="font-body-sm text-body-sm">Vehicle Insurance</span>
+<span class="font-label-md text-label-md font-bold">In 12 Days</span>
+</div>
+<button class="w-full py-2 bg-warning-amber text-white font-label-md rounded hover:opacity-90 transition-opacity">
+                            Renew Now (₹ 8,450)
+                        </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Insights Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container p-6 rounded-xl border border-border-subtle">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined" data-icon="health_and_safety">health_and_safety</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm font-bold mb-2">Portfolio Health</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Your diversification is excellent. Equity exposure is currently at 62%.</p>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border border-border-subtle">
+<div class="w-10 h-10 rounded-full bg-secondary/10 flex items-center justify-center text-secondary mb-4">
+<span class="material-symbols-outlined" data-icon="savings">savings</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm font-bold mb-2">Tax Planning</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">₹ 45k more investment needed in ELSS to maximize 80C benefits.</p>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border border-border-subtle">
+<div class="w-10 h-10 rounded-full bg-tertiary/10 flex items-center justify-center text-tertiary mb-4">
+<span class="material-symbols-outlined" data-icon="rocket_launch">rocket_launch</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm font-bold mb-2">Wealth Momentum</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">On track to reach ₹ 5Cr net worth by age 42 at current growth rates.</p>
+</div>
+</div>
+</main>
+<!-- Floating Action Button for Dashboard -->
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-[28px]" data-icon="add">add</span>
+</button>
+</div>
+</body></html>

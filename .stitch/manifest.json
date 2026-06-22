@@ -1,0 +1,90 @@
+[
+  {
+    "name": "onboarding-step-1-mobile",
+    "screenId": "caeada0d2d6241af9ac11fd3a99dcff8",
+    "title": "Onboarding: Step 1",
+    "deviceType": "MOBILE",
+    "width": "780",
+    "height": "1768"
+  },
+  {
+    "name": "onboarding-step-2-mobile",
+    "screenId": "234173833555451aaad97e43db455f20",
+    "title": "Onboarding: Step 2",
+    "deviceType": "MOBILE",
+    "width": "780",
+    "height": "2078"
+  },
+  {
+    "name": "onboarding-step-3-mobile",
+    "screenId": "3ad827a596034c59a2d71a60a65a6119",
+    "title": "Onboarding: Step 3",
+    "deviceType": "MOBILE",
+    "width": "780",
+    "height": "1772"
+  },
+  {
+    "name": "dashboard-level-0-mobile",
+    "screenId": "64c5212264fa43abb09c6c9697f782db",
+    "title": "Dashboard: Level 0",
+    "deviceType": "MOBILE",
+    "width": "780",
+    "height": "2412"
+  },
+  {
+    "name": "dashboard-level-1-mobile",
+    "screenId": "8b89feccc56a4ac69fc457e9771294f7",
+    "title": "Dashboard: Level 1 (Protection)",
+    "deviceType": "MOBILE",
+    "width": "780",
+    "height": "2560"
+  },
+  {
+    "name": "onboarding-step-1-desktop",
+    "screenId": "0b9223b944bd4f86acceefe9c342b762",
+    "title": "Desktop Onboarding: Step 1",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2048"
+  },
+  {
+    "name": "onboarding-step-2-desktop",
+    "screenId": "517fdee00e1a42cbb8527ee0d00753f9",
+    "title": "Desktop Onboarding: Step 2",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2348"
+  },
+  {
+    "name": "onboarding-step-3-desktop",
+    "screenId": "a2ba0c418c58422687f818a2427c09a4",
+    "title": "Desktop Onboarding: Step 3",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2148"
+  },
+  {
+    "name": "dashboard-level-0-desktop",
+    "screenId": "bd9a2c3e61ea4643a30c002afcda92df",
+    "title": "Desktop Dashboard: Level 0",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2048"
+  },
+  {
+    "name": "dashboard-level-1-desktop",
+    "screenId": "8015e93c6027424aa14f3df3e903d748",
+    "title": "Desktop Dashboard: Level 1",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2510"
+  },
+  {
+    "name": "dashboard-level-2-desktop",
+    "screenId": "cd930ab1f43d42cd90b1f9c68a81e001",
+    "title": "Desktop Dashboard: Level 2",
+    "deviceType": "DESKTOP",
+    "width": "2560",
+    "height": "2176"
+  }
+]

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input:focus {
+            outline: none;
+            border-color: #00694c !important;
+            box-shadow: 0 0 0 2px rgba(0, 105, 76, 0.1);
+        }
+        .input-transition {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Mobile-First Constraints */
+        .content-canvas {
+            max-width: 420px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#e7e8e9",
+                      "inverse-surface": "#2e3132",
+                      "on-surface": "#191c1d",
+                      "secondary-fixed-dim": "#c5c0ff",
+                      "surface-variant": "#e1e3e4",
+                      "background": "#f8f9fa",
+                      "border-subtle": "rgba(0, 0, 0, 0.05)",
+                      "on-surface-variant": "#3d4943",
+                      "surface-tint": "#006c4e",
+                      "primary-dark-mode": "#9FE1CB",
+                      "on-secondary-fixed-variant": "#41379b",
+                      "surface-dim": "#d9dadb",
+                      "primary-fixed": "#86f8c9",
+                      "outline-variant": "#bccac1",
+                      "on-tertiary-fixed-variant": "#2d5000",
+                      "surface-bright": "#f8f9fa",
+                      "on-secondary-container": "#33288d",
+                      "on-tertiary-container": "#f9ffeb",
+                      "surface": "#f8f9fa",
+                      "error-container": "#ffdad6",
+                      "secondary-container": "#9f97ff",
+                      "primary": "#00694c",
+                      "surface-card-dark": "#27272A",
+                      "on-tertiary": "#ffffff",
+                      "tertiary": "#3c6700",
+                      "on-tertiary-fixed": "#0f2000",
+                      "secondary-fixed": "#e4dfff",
+                      "on-primary": "#ffffff",
+                      "surface-card-light": "#F9FAFB",
+                      "tertiary-fixed": "#b7f473",
+                      "tertiary-container": "#4e8204",
+                      "bg-zinc-900": "#18181B",
+                      "primary-container": "#008560",
+                      "surface-container": "#edeeef",
+                      "inverse-on-surface": "#f0f1f2",
+                      "on-primary-container": "#f5fff7",
+                      "tertiary-fixed-dim": "#9dd75a",
+                      "surface-container-highest": "#e1e3e4",
+                      "surface-container-low": "#f3f4f5",
+                      "on-secondary-fixed": "#140067",
+                      "inverse-primary": "#68dbae",
+                      "on-primary-fixed": "#002115",
+                      "warning-amber": "#BA7517",
+                      "secondary": "#5951b4",
+                      "on-error-container": "#93000a",
+                      "on-background": "#191c1d",
+                      "error": "#ba1a1a",
+                      "primary-fixed-dim": "#68dbae",
+                      "on-secondary": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#6d7a73",
+                      "on-primary-fixed-variant": "#00513a",
+                      "on-error": "#ffffff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "stack-sm": "0.5rem",
+                      "gutter-grid": "1rem",
+                      "max-width": "420px",
+                      "stack-md": "1rem",
+                      "margin-mobile": "1.25rem",
+                      "stack-lg": "1.5rem"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-sm": ["Inter"]
+              },
+              "fontSize": {
+                      "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                      "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                      "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface">
+<main class="content-canvas px-margin-mobile relative">
+<!-- Progress Bar (Journey Step Indicator) -->
+<div class="mt-8 mb-12 flex items-center justify-start gap-3">
+<div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[18px]" style="font-variation-settings: 'FILL' 1;">ads_click</span>
+</div>
+<div class="h-[1px] w-8 border-t-2 border-dashed border-outline-variant"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+</div>
+<div class="h-[1px] w-8 border-t-2 border-dashed border-outline-variant"></div>
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant flex items-center justify-center">
+<span class="w-2 h-2 rounded-full bg-outline-variant"></span>
+</div>
+</div>
+<!-- Header Section -->
+<header class="mb-12">
+<h1 class="font-display-lg text-display-lg text-on-surface tracking-tight mb-2">Let's start simple</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Tell us your typical monthly flow to build your first vault insight.</p>
+</header>
+<!-- Form Section -->
+<section class="flex-grow space-y-stack-lg">
+<!-- Income Input -->
+<div class="relative group">
+<label class="font-label-md text-label-md text-on-surface-variant mb-2 block" for="income">Monthly take-home income (INR/₹)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-headline-sm text-headline-sm text-outline">₹</span>
+<input class="w-full h-16 pl-10 pr-4 bg-surface-container-lowest border-[0.5px] border-outline-variant rounded-xl font-headline-md text-headline-md text-on-surface input-transition focus:bg-white" id="income" placeholder="0" type="number"/>
+</div>
+<div class="mt-2 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Private to your vault</p>
+</div>
+</div>
+<!-- Expenses Input -->
+<div class="relative group">
+<label class="font-label-md text-label-md text-on-surface-variant mb-2 block" for="expenses">Monthly usual expenses (INR/₹)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-headline-sm text-headline-sm text-outline">₹</span>
+<input class="w-full h-16 pl-10 pr-4 bg-surface-container-lowest border-[0.5px] border-outline-variant rounded-xl font-headline-md text-headline-md text-on-surface input-transition focus:bg-white" id="expenses" placeholder="0" type="number"/>
+</div>
+<p class="mt-2 font-label-sm text-label-sm text-on-surface-variant">Includes rent, bills, and groceries.</p>
+</div>
+<!-- Decorative Visual (Bento-style Preview) -->
+<div class="mt-8 p-4 rounded-xl border-[0.5px] border-outline-variant bg-surface-container-low opacity-60">
+<div class="flex items-center justify-between mb-4">
+<div class="h-4 w-24 bg-outline-variant/30 rounded-full"></div>
+<div class="h-6 w-16 bg-primary/20 rounded-full"></div>
+</div>
+<div class="space-y-2">
+<div class="h-2 w-full bg-outline-variant/20 rounded-full"></div>
+<div class="h-2 w-2/3 bg-outline-variant/20 rounded-full"></div>
+</div>
+</div>
+</section>
+<!-- Bottom Action Area -->
+<footer class="py-8 space-y-6">
+<button class="w-full h-14 bg-primary text-on-primary font-headline-sm text-headline-sm rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-sm">
+                Show my picture
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<!-- Security Badge -->
+<div class="flex justify-center">
+<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border-[0.5px] border-outline-variant bg-surface-container-low">
+<span class="material-symbols-outlined text-[16px] text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">End-to-end encrypted vault</span>
+</div>
+</div>
+</footer>
+<!-- Atmospheric Background Shaders (Subtle) -->
+<div class="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+<div class="absolute top-[-10%] right-[-10%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px]"></div>
+<div class="absolute bottom-[-5%] left-[-5%] w-[300px] h-[300px] bg-tertiary/5 rounded-full blur-[80px]"></div>
+</div>
+</main>
+<script>
+        // Simple Interaction logic
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', (e) => {
+                const button = document.querySelector('button');
+                const val1 = document.getElementById('income').value;
+                const val2 = document.getElementById('expenses').value;
+                
+                if(val1 > 0 && val2 > 0) {
+                    button.classList.remove('opacity-50');
+                    button.classList.add('bg-primary');
+                } else {
+                    // Start state
+                }
+            });
+        });
+
+        // Add visual feedback on input
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.style.transform = 'translateY(-2px)';
+                input.parentElement.parentElement.style.transition = 'transform 0.2s ease';
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

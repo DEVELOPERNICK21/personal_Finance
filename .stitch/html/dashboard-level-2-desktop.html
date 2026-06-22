@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Zenith Finance | Emergency Fund Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "primary-fixed-dim": "#68dbae",
+                "inverse-primary": "#68dbae",
+                "on-tertiary-fixed-variant": "#2d5000",
+                "border-subtle": "rgba(0, 0, 0, 0.05)",
+                "on-secondary-fixed-variant": "#41379b",
+                "on-secondary-fixed": "#140067",
+                "on-primary-fixed-variant": "#00513a",
+                "inverse-surface": "#2e3132",
+                "on-primary-container": "#f5fff7",
+                "secondary": "#5951b4",
+                "outline-variant": "#bccac1",
+                "surface-container-low": "#f3f4f5",
+                "outline": "#6d7a73",
+                "on-secondary-container": "#33288d",
+                "tertiary-fixed": "#b7f473",
+                "on-surface-variant": "#3d4943",
+                "on-background": "#191c1d",
+                "primary-fixed": "#86f8c9",
+                "surface-card-light": "#F9FAFB",
+                "on-primary": "#ffffff",
+                "warning-amber": "#BA7517",
+                "secondary-container": "#9f97ff",
+                "primary-container": "#008560",
+                "on-primary-fixed": "#002115",
+                "surface-container": "#edeeef",
+                "surface-variant": "#e1e3e4",
+                "secondary-fixed": "#e4dfff",
+                "background": "#f8f9fa",
+                "surface-container-highest": "#e1e3e4",
+                "on-tertiary-container": "#f9ffeb",
+                "tertiary-container": "#4e8204",
+                "error": "#ba1a1a",
+                "tertiary-fixed-dim": "#9dd75a",
+                "surface": "#f8f9fa",
+                "on-tertiary": "#ffffff",
+                "surface-card-dark": "#27272A",
+                "on-error": "#ffffff",
+                "on-surface": "#191c1d",
+                "surface-dim": "#d9dadb",
+                "primary-dark-mode": "#9FE1CB",
+                "on-error-container": "#93000a",
+                "on-tertiary-fixed": "#0f2000",
+                "on-secondary": "#ffffff",
+                "error-container": "#ffdad6",
+                "surface-tint": "#006c4e",
+                "surface-container-lowest": "#ffffff",
+                "inverse-on-surface": "#f0f1f2",
+                "surface-bright": "#f8f9fa",
+                "bg-zinc-900": "#18181B",
+                "primary": "#00694c",
+                "tertiary": "#3c6700",
+                "secondary-fixed-dim": "#c5c0ff",
+                "surface-container-high": "#e7e8e9"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline-sm": ["Inter"],
+                "body-lg": ["Inter"],
+                "label-sm": ["Inter"],
+                "label-md": ["Inter"],
+                "display-lg": ["Inter"],
+                "body-md": ["Inter"],
+                "body-sm": ["Inter"],
+                "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}],
+                "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500"}]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .vault-gradient {
+            background: linear-gradient(135deg, rgba(0, 105, 76, 0.05) 0%, rgba(60, 103, 0, 0.02) 100%);
+        }
+        .progress-segment {
+            transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- Desktop SideNavBar Shell -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-surface-container-low border-r border-border-subtle flex flex-col py-6 z-50">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">security</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-primary font-bold">Zenith Finance</span>
+</div>
+<div class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 mx-4 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-body-md text-body-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-4 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Money</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-4 rounded-lg text-primary font-bold border-r-4 border-primary bg-primary-container/10 transition-colors" href="#">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-body-md text-body-md">Goals</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-4 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-body-md text-body-md">Docs</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 mx-4 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-body-md text-body-md">More</span>
+</a>
+</div>
+<div class="px-6 mt-auto">
+<div class="flex items-center gap-3 p-3 rounded-xl bg-surface-container mb-4">
+<img class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional studio portrait of a young entrepreneur in her early 30s with a confident and serene expression. She is wearing a modern teal blazer that reflects the Zenith Finance brand colors. The lighting is soft and high-key, set against a minimalist architectural background of a modern office space in Bangalore, creating a vibe of success and reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6GWufcWsWF2gLmK9EC4LETg9k_wGBAxbJYQzhqKKiNXy6mEvt9mbWJezM6pGaanN8G6zXfe5IJQdZBUeGDljK3PQEdBS6XZn5v3lofytlWOda1HHa3BNVZ_txSwEQtPX-3R3P-cr9Ey4sZqBVLvA5zml_Yc9TQJ2zAuWDY_kew0wpHVfKLTDLTlwIWH9bnMPeqkWoEY-lXUyYEdsimzp6SNbXsA_L-MF6K8QXP9WwitXuRVLB-KEyoHBWZqv4_Vu5S6sFc0wA3vY"/>
+<div>
+<p class="font-label-md text-label-md font-bold">Ananya S.</p>
+<p class="text-[10px] text-on-surface-variant">Secure Vault Active</p>
+</div>
+</div>
+<button class="w-full py-2 bg-primary text-on-primary rounded-lg font-label-md text-label-md font-bold hover:opacity-90 transition-opacity">
+                Lock Vault
+            </button>
+</div>
+</nav>
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface border-b border-border-subtle flex justify-between items-center px-8 z-40">
+<div class="flex items-center gap-4">
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Goal: Emergency Fund</span>
+<div class="flex items-center gap-2 px-2 py-0.5 rounded-full border border-primary/20 bg-primary/5">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">E2EE Vault</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center bg-surface-container-low border border-border-subtle rounded-full px-4 py-1.5 w-64 group focus-within:border-primary transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full outline-none" placeholder="Search insights..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">lock</span></button>
+<button class="hover:text-primary transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined">settings</span></button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-screen bg-background">
+<div class="max-w-[1200px] mx-auto space-y-8">
+<!-- Hero Grid: Runway & Emergency Fund -->
+<section class="grid grid-cols-12 gap-6">
+<!-- Large Runway Widget (L2) -->
+<div class="col-span-12 lg:col-span-8 bg-surface-container-lowest border-[0.5px] border-border-subtle rounded-xl p-8 relative overflow-hidden shadow-sm">
+<div class="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[120px] text-primary">savings</span>
+</div>
+<div class="relative z-10">
+<h2 class="font-headline-md text-headline-md mb-2">Emergency Fund Runway</h2>
+<p class="text-on-surface-variant font-body-sm text-body-sm mb-8">Calculated based on your average monthly burn of ₹85,000.</p>
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<span class="font-display-lg text-display-lg text-primary font-bold">4.2 Months</span>
+<span class="text-on-surface-variant font-body-md text-body-md ml-2">Saved</span>
+</div>
+<div class="text-right">
+<p class="font-label-md text-label-md text-on-surface-variant">Target: 6 Months</p>
+<p class="font-headline-sm text-headline-sm font-semibold">₹5,10,000</p>
+</div>
+</div>
+<!-- Runway Progress Bar Component -->
+<div class="relative h-12 bg-surface-container rounded-full overflow-hidden flex p-1 border border-border-subtle">
+<!-- Months 1-4.2 (Active Teal) -->
+<div class="progress-segment h-full bg-primary rounded-full relative group" style="width: 70%;">
+<div class="absolute inset-0 bg-white/10 animate-pulse"></div>
+</div>
+<!-- Future Segment -->
+<div class="flex-1 h-full flex gap-1 ml-1">
+<div class="h-full w-full border border-dashed border-outline-variant rounded-full opacity-40"></div>
+</div>
+</div>
+<!-- Detailed Breakdown Grid -->
+<div class="grid grid-cols-3 gap-6 pt-4 border-t border-border-subtle">
+<div class="space-y-1">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Current Balance</p>
+<p class="font-headline-sm text-headline-sm">₹3,57,000</p>
+</div>
+<div class="space-y-1 border-x border-border-subtle px-6">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Gap to Goal</p>
+<p class="font-headline-sm text-headline-sm text-secondary">₹1,53,000</p>
+</div>
+<div class="space-y-1 pl-6">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-tighter">Monthly Contribution</p>
+<p class="font-headline-sm text-headline-sm">₹25,000</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Widget: Net Worth (L0/L1) -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-surface-container-lowest border-[0.5px] border-border-subtle rounded-xl p-6 shadow-sm">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant uppercase">Current Net Worth</span>
+<span class="text-primary material-symbols-outlined">trending_up</span>
+</div>
+<p class="font-display-lg text-display-lg font-bold mb-1">₹42,85,000</p>
+<div class="flex items-center gap-2 text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span>4.2% since last month</span>
+</div>
+</div>
+<div class="bg-primary/5 border-[0.5px] border-primary/20 rounded-xl p-6 shadow-sm relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-5 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-8xl text-primary">verified</span>
+</div>
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">security</span>
+<span class="font-label-md text-label-md text-primary font-bold uppercase">Insurance Summary</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Life Coverage</span>
+<span class="font-bold">₹1.5 Cr</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">Health Cover</span>
+<span class="font-bold">₹15 L</span>
+</div>
+<div class="pt-2">
+<span class="inline-flex items-center gap-1 px-2 py-1 rounded bg-primary text-on-primary text-[10px] font-bold">FULLY INSURED</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Section: Insights & Actions (Bento Style) -->
+<section class="grid grid-cols-12 gap-6">
+<!-- Journey Step Indicator (L2 Goal Journey) -->
+<div class="col-span-12 md:col-span-4 bg-surface-container-lowest border-[0.5px] border-border-subtle rounded-xl p-6">
+<h3 class="font-headline-sm text-headline-sm mb-6">Financial Milestone Path</h3>
+<div class="space-y-8 relative">
+<!-- Connecting Line -->
+<div class="absolute left-4 top-2 bottom-2 w-0.5 bg-surface-variant"></div>
+<!-- Step 1: Done -->
+<div class="relative flex items-start gap-6">
+<div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center z-10 ring-4 ring-white">
+<span class="material-symbols-outlined text-white text-lg">check</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">MILESTONE 1</p>
+<p class="font-body-md text-body-md font-bold">Clear High Interest Debt</p>
+</div>
+</div>
+<!-- Step 2: Now -->
+<div class="relative flex items-start gap-6">
+<div class="w-8 h-8 rounded-full border-2 border-secondary bg-white flex items-center justify-center z-10 ring-4 ring-white">
+<div class="w-3 h-3 rounded-full bg-secondary animate-pulse"></div>
+</div>
+<div>
+<p class="font-label-md text-label-md text-secondary font-bold">IN PROGRESS</p>
+<p class="font-body-md text-body-md font-bold">Emergency Fund (6m)</p>
+</div>
+</div>
+<!-- Step 3: Next -->
+<div class="relative flex items-start gap-6">
+<div class="w-8 h-8 rounded-full border-2 border-dashed border-outline-variant bg-white z-10 ring-4 ring-white"></div>
+<div class="opacity-40">
+<p class="font-label-md text-label-md text-on-surface-variant">UPCOMING</p>
+<p class="font-body-md text-body-md">Wealth Building Portfolio</p>
+</div>
+</div>
+</div>
+</div>
+<!-- 2x2 Grid for "This Month" (L1 Metrics) -->
+<div class="col-span-12 md:col-span-8 grid grid-cols-2 gap-4">
+<div class="bg-surface-container p-6 rounded-xl border-[0.5px] border-border-subtle flex flex-col justify-between group hover:bg-white hover:shadow-lg transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary mb-4">account_balance_wallet</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">TOTAL INCOME</p>
+<p class="font-headline-md text-headline-md">₹1,45,000</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border-[0.5px] border-border-subtle flex flex-col justify-between hover:bg-white hover:shadow-lg transition-all cursor-pointer">
+<span class="material-symbols-outlined text-error mb-4">shopping_cart</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">TOTAL SPENT</p>
+<p class="font-headline-md text-headline-md">₹62,400</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border-[0.5px] border-border-subtle flex flex-col justify-between hover:bg-white hover:shadow-lg transition-all cursor-pointer">
+<span class="material-symbols-outlined text-tertiary mb-4">trending_up</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">SAVINGS RATE</p>
+<p class="font-headline-md text-headline-md">56.9%</p>
+</div>
+</div>
+<div class="bg-surface-container p-6 rounded-xl border-[0.5px] border-border-subtle flex flex-col justify-between hover:bg-white hover:shadow-lg transition-all cursor-pointer">
+<div class="w-full h-full absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity rounded-xl" data-alt="A macro photograph of fresh dew drops on a minimalist teal leaf, representing growth and the freshness of a new financial start. The lighting is early morning soft sun, creating beautiful bokeh and a sense of calm reliability consistent with the Zenith Finance brand." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDl7RuKBvkkTt6Q7VZxJ9BxkqOe0W6gCPJudMrlVDXTfrFQv9yp6V7ULppyBUveX87xlolKk42fJ2bKCv-p9QCwdHoEjZWw7AEmvhjlnZ7Ih_fJz7Y8wkP2ORrJNkEwK7ORCIh4Tb6eDrNseHokfU99TVd4cNEI_XT05FZBgOhok7B6sZ-gTH0IAoJGvyfqQBb0JMdoU0BOgyz-23Am08oV_ybdX2q85QCOnay5nIwbqeDGo_zMxre4YAWmcwjy1Gj0XpIS5rBslbc')"></div>
+<span class="material-symbols-outlined text-secondary mb-4">auto_awesome</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">ZENITH SCORE</p>
+<p class="font-headline-md text-headline-md">842</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Floating Action for Goal (Primary Action) -->
+<div class="fixed bottom-10 right-10 z-[60]">
+<button class="flex items-center gap-3 bg-primary text-on-primary px-6 py-4 rounded-full shadow-xl hover:scale-105 active:scale-95 transition-all group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-label-md text-label-md font-bold">One-time Boost</span>
+</button>
+</div>
+<script>
+        // Micro-interaction for Progress Bar initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const segments = document.querySelectorAll('.progress-segment');
+            segments.forEach(segment => {
+                const targetWidth = segment.style.width;
+                segment.style.width = '0%';
+                setTimeout(() => {
+                    segment.style.width = targetWidth;
+                }, 300);
+            });
+        });
+    </script>
+</body></html>

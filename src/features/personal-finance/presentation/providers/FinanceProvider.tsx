@@ -13,10 +13,11 @@ import {
 import { deriveMetrics, loadFinanceForUser, saveFinanceForUser } from "../../core/application/finance-service";
 import { createEmptyFinanceData } from "../../core/domain/defaults";
 import type { FinanceConfig, FinanceData, FinanceMetrics } from "../../core/domain/types";
-import { saveLocalFinanceData } from "../../infrastructure/finance-repository";
+import { saveLocalFinanceData, loadLocalFinanceData } from "../../infrastructure/finance-repository";
 import { createFinanceConfig } from "../../config";
 import { useAuth } from "./AuthProvider";
 import { useVault } from "./VaultProvider";
+import { GUEST_UID } from "../../lib/guest-profile";
 
 export type SaveStatus = "idle" | "loading" | "saving" | "saved" | "error" | "offline";
 
@@ -39,6 +40,8 @@ interface FinanceProviderProps {
   children: ReactNode;
   config?: Partial<FinanceConfig>;
   initialData?: FinanceData;
+  /** Local-only mode before sign-in; uses guest storage key without vault crypto. */
+  guestMode?: boolean;
 }
 
 const SAVE_DEBOUNCE_MS = 600;
@@ -47,9 +50,11 @@ export function FinanceProvider({
   children,
   config: configOverrides,
   initialData,
+  guestMode = false,
 }: FinanceProviderProps) {
   const { user, status: authStatus } = useAuth();
   const { cryptoKey, salt, status: vaultStatus } = useVault();
+  const effectiveUid = guestMode ? GUEST_UID : user?.uid;
   const config = useMemo(
     () => createFinanceConfig(configOverrides),
     [configOverrides]
@@ -130,7 +135,29 @@ export function FinanceProvider({
   }, [vaultCrypto]);
 
   useEffect(() => {
-    if (initialData) return;
+    if (guestMode && initialData) {
+      skipSaveRef.current = false;
+      setSaveStatus("offline");
+    }
+  }, [guestMode, initialData]);
+
+  useEffect(() => {
+    if (initialData && !guestMode) return;
+    if (guestMode) {
+      if (!effectiveUid) return;
+      if (initialData) return;
+      skipSaveRef.current = true;
+      queueMicrotask(() => {
+        void loadLocalFinanceData(effectiveUid).then((loaded) => {
+          setData(loaded);
+          dataRef.current = loaded;
+          setSaveStatus("offline");
+          setUsesCloudStorage(false);
+          skipSaveRef.current = false;
+        });
+      });
+      return;
+    }
     if (authStatus === "loading" || vaultStatus !== "unlocked" || !vaultCrypto) return;
 
     if (!user) {
@@ -150,16 +177,25 @@ export function FinanceProvider({
       skipSaveRef.current = false;
       void loadUserFinance(user.uid);
     });
-  }, [initialData, authStatus, vaultStatus, vaultCrypto, user, loadUserFinance]);
+  }, [initialData, authStatus, vaultStatus, vaultCrypto, user, loadUserFinance, guestMode, effectiveUid]);
 
   useEffect(() => {
     dataRef.current = data;
   }, [data]);
 
   useEffect(() => {
-    if (skipSaveRef.current || !user || !vaultCrypto) return;
+    if (skipSaveRef.current) return;
+    const uid = guestMode ? GUEST_UID : user?.uid;
+    if (!uid) return;
 
-    void saveLocalFinanceData(user.uid, data, vaultCrypto.key, vaultCrypto.salt);
+    if (guestMode) {
+      void saveLocalFinanceData(uid, data, null, null);
+      return;
+    }
+
+    if (!vaultCrypto) return;
+
+    void saveLocalFinanceData(uid, data, vaultCrypto.key, vaultCrypto.salt);
 
     if (!usesCloudStorage) return;
 
@@ -172,7 +208,7 @@ export function FinanceProvider({
     return () => {
       if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
     };
-  }, [data, usesCloudStorage, user, persistToCloud, vaultCrypto]);
+  }, [data, usesCloudStorage, user, persistToCloud, vaultCrypto, guestMode]);
 
   useEffect(() => {
     const handleBeforeUnload = () => {

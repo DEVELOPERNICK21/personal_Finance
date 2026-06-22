@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Zenith Vault - Level 1 Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#68dbae",
+                        "inverse-primary": "#68dbae",
+                        "on-tertiary-fixed-variant": "#2d5000",
+                        "border-subtle": "rgba(0, 0, 0, 0.05)",
+                        "on-secondary-fixed-variant": "#41379b",
+                        "on-secondary-fixed": "#140067",
+                        "on-primary-fixed-variant": "#00513a",
+                        "inverse-surface": "#2e3132",
+                        "on-primary-container": "#f5fff7",
+                        "secondary": "#5951b4",
+                        "outline-variant": "#bccac1",
+                        "surface-container-low": "#f3f4f5",
+                        "outline": "#6d7a73",
+                        "on-secondary-container": "#33288d",
+                        "tertiary-fixed": "#b7f473",
+                        "on-surface-variant": "#3d4943",
+                        "on-background": "#191c1d",
+                        "primary-fixed": "#86f8c9",
+                        "surface-card-light": "#F9FAFB",
+                        "on-primary": "#ffffff",
+                        "warning-amber": "#BA7517",
+                        "secondary-container": "#9f97ff",
+                        "primary-container": "#008560",
+                        "on-primary-fixed": "#002115",
+                        "surface-container": "#edeeef",
+                        "surface-variant": "#e1e3e4",
+                        "secondary-fixed": "#e4dfff",
+                        "background": "#f8f9fa",
+                        "surface-container-highest": "#e1e3e4",
+                        "on-tertiary-container": "#f9ffeb",
+                        "tertiary-container": "#4e8204",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#9dd75a",
+                        "surface": "#f8f9fa",
+                        "on-tertiary": "#ffffff",
+                        "surface-card-dark": "#27272A",
+                        "on-error": "#ffffff",
+                        "on-surface": "#191c1d",
+                        "surface-dim": "#d9dadb",
+                        "primary-dark-mode": "#9FE1CB",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed": "#002000",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#006c4e",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#f0f1f2",
+                        "surface-bright": "#f8f9fa",
+                        "bg-zinc-900": "#18181B",
+                        "primary": "#00694c",
+                        "tertiary": "#3c6700",
+                        "secondary-fixed-dim": "#c5c0ff",
+                        "surface-container-high": "#e7e8e9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "max-width": "420px",
+                        "gutter-grid": "1rem",
+                        "stack-lg": "1.5rem",
+                        "stack-sm": "0.5rem",
+                        "stack-md": "1rem",
+                        "margin-mobile": "1.25rem"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "label-sm": ["10px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500"}],
+                        "display-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
+        .hairline-border { border: 0.5px solid rgba(109, 122, 115, 0.2); }
+        .progress-segment { height: 6px; border-radius: 3px; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface flex justify-center">
+<div class="w-full max-w-max-width min-h-screen relative pb-24 overflow-x-hidden">
+<!-- TopAppBar (From JSON Anchor) -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile h-16 bg-surface border-b-[0.5px] border-outline-variant max-w-[420px] left-1/2 -translate-x-1/2">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden hairline-border bg-surface-container-high">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a confident Indian woman in her early 30s, wearing business casual attire. The lighting is soft and high-key, set against a minimalist gray background. The aesthetic is clean, modern, and aligned with a premium financial brand focused on security and clarity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDNxMWPJSo5JcHNcMC6X8ng-BZVEEstCu8VGz9LlN9_oM3hOeCPlfjUk9qG_eyFzPJVM83NQ0geOGBFdYPMs5fnEjP8f0EeKgL4PIF6z7xVvByIoIWMwPdnDwgVefRB12Ux5J2uN_8FJf0f5FBXB7UJARg-cfdTnbC0Z0y_bDh_2HyOjOkrszVzIik3_bmRDISp9u-GxZTCp6yE4e-b_I7VgVdeAWrLVj9fHOx3M0Tc6eb-Oy3sdA3yTFXzZXDgyQyaJaj5rRkzsUw"/>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-medium text-on-surface">Vault</h1>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-surface-container-low rounded-full hairline-border">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">lock</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Locked</span>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="mt-20 px-margin-mobile flex flex-col gap-stack-lg">
+<!-- Net Worth Hero -->
+<section class="flex flex-col gap-stack-sm pt-4">
+<div class="flex justify-between items-end">
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Combined Net Worth</p>
+<h2 class="font-display-lg text-display-lg text-primary">₹84,29,400</h2>
+</div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">trending_up</span>
+<span class="font-label-md text-label-md">2.4%</span>
+</div>
+</div>
+</section>
+<!-- Runway Section -->
+<section class="bg-surface-container-lowest p-5 rounded-xl hairline-border flex flex-col gap-4">
+<div class="flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Runway</h3>
+<span class="font-label-md text-label-md text-primary font-bold">Lvl 1 Unlocked</span>
+</div>
+<div class="flex gap-1">
+<div class="flex-1 progress-segment bg-primary"></div>
+<div class="flex-1 progress-segment bg-primary"></div>
+<div class="flex-1 progress-segment bg-surface-variant"></div>
+<div class="flex-1 progress-segment bg-surface-variant"></div>
+<div class="flex-1 progress-segment bg-surface-variant"></div>
+<div class="flex-1 progress-segment bg-surface-variant"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">You can maintain your current lifestyle for <span class="text-on-surface font-semibold">2 months</span> if income stops today.</p>
+</section>
+<!-- Protection Section (The Request) -->
+<section class="flex flex-col gap-stack-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Financial Protection</h3>
+<div class="flex items-center gap-1 bg-primary-fixed-dim/20 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-primary" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="font-label-sm text-label-sm text-primary uppercase tracking-wider">Secure</span>
+</div>
+</div>
+<!-- Sub-section: Insurance (Bento Style) -->
+<div class="flex flex-col gap-stack-sm">
+<p class="font-label-md text-label-md text-on-surface-variant ml-1">Insurance Policies</p>
+<div class="grid grid-cols-4 gap-3">
+<div class="col-span-2 bg-surface-container-low p-4 rounded-xl hairline-border flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">medical_services</span>
+<p class="font-label-md text-label-md text-on-surface">Health</p>
+<p class="font-body-md text-body-md font-semibold">₹15 Lakhs</p>
+</div>
+<div class="col-span-2 bg-surface-container-low p-4 rounded-xl hairline-border flex flex-col gap-2">
+<span class="material-symbols-outlined text-primary text-[24px]">family_restroom</span>
+<p class="font-label-md text-label-md text-on-surface">Term Life</p>
+<p class="font-body-md text-body-md font-semibold">₹1.5 Cr</p>
+</div>
+<div class="col-span-4 bg-surface-container-low px-4 py-3 rounded-xl hairline-border flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">directions_car</span>
+<span class="font-body-md text-body-md text-on-surface">Vehicle (MH12)</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant">Active</span>
+</div>
+</div>
+</div>
+<!-- Sub-section: Documents (Asymmetric Layout) -->
+<div class="flex flex-col gap-stack-sm mt-2">
+<p class="font-label-md text-label-md text-on-surface-variant ml-1">Critical Documents</p>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-lowest p-3 rounded-xl hairline-border flex flex-col items-center gap-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">badge</span>
+<span class="font-label-sm text-label-sm">PAN</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl hairline-border flex flex-col items-center gap-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">fingerprint</span>
+<span class="font-label-sm text-label-sm">Aadhaar</span>
+</div>
+<div class="bg-surface-container-lowest p-3 rounded-xl hairline-border flex flex-col items-center gap-1 text-center">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">history_edu</span>
+<span class="font-label-sm text-label-sm">Will</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Renewing Soon Card -->
+<section>
+<div class="bg-secondary-container/20 p-5 rounded-2xl hairline-border relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-headline-sm text-headline-sm text-secondary-container text-on-secondary-container mb-1">What's renewing soon?</h4>
+<p class="font-body-sm text-body-sm text-on-secondary-container/80 mb-4">You have 2 items requiring attention in the next 30 days.</p>
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-3 bg-surface-container-lowest/80 p-3 rounded-lg border-[0.5px] border-secondary-container/30">
+<div class="w-10 h-10 rounded bg-secondary-container/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">car_rental</span>
+</div>
+<div class="flex-1">
+<p class="font-label-md text-label-md text-on-surface">Car Insurance</p>
+<p class="font-label-sm text-label-sm text-error">Expires in 12 days</p>
+</div>
+<button class="px-3 py-1 bg-secondary text-on-secondary rounded-lg font-label-md text-label-md">Renew</button>
+</div>
+</div>
+</div>
+<!-- Decorative Background Element -->
+<div class="absolute -right-4 -bottom-4 w-24 h-24 bg-secondary/10 rounded-full blur-2xl"></div>
+</div>
+</section>
+<!-- Journey/Timeline -->
+<section class="flex flex-col gap-stack-md mt-2 mb-8">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Your Roadmap</h3>
+<div class="flex flex-col gap-4 relative pl-8">
+<!-- Vertical Line -->
+<div class="absolute left-3 top-2 bottom-2 w-[1.5px] bg-outline-variant"></div>
+<div class="relative flex flex-col">
+<div class="absolute -left-8 top-1 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[14px]">check</span>
+</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Done</p>
+<p class="font-body-md text-body-md text-on-surface">Foundation: 2mo Emergency Fund</p>
+</div>
+<div class="relative flex flex-col">
+<div class="absolute -left-8 top-1 w-6 h-6 rounded-full border-2 border-primary bg-surface flex items-center justify-center">
+<div class="w-2 h-2 rounded-full bg-primary animate-pulse"></div>
+</div>
+<p class="font-label-md text-label-md text-primary font-semibold">Now</p>
+<p class="font-body-md text-body-md text-on-surface">Protection: Document Vault &amp; Will</p>
+</div>
+<div class="relative flex flex-col opacity-50">
+<div class="absolute -left-8 top-1 w-6 h-6 rounded-full border-2 border-dashed border-outline flex items-center justify-center"></div>
+<p class="font-label-md text-label-md text-on-surface-variant font-semibold">Next</p>
+<p class="font-body-md text-body-md text-on-surface">Wealth: Portfolio Optimization</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Quick Action FAB (Contextual for Home) -->
+<button class="fixed bottom-24 right-margin-mobile w-14 h-14 bg-primary text-on-primary rounded-2xl shadow-lg flex items-center justify-center active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-[28px]">lock_open</span>
+</button>
+<!-- BottomNavBar (From JSON Anchor) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-2 pb-2 h-20 bg-surface-container-lowest border-t-[0.5px] border-outline-variant max-w-[420px] left-1/2 -translate-x-1/2">
+<div class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-xl px-3 py-1 active:scale-95 transition-transform">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-sm text-label-sm">Money</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">ads_click</span>
+<span class="font-label-sm text-label-sm">Goals</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-sm text-label-sm">Docs</span>
+</div>
+<div class="flex flex-col items-center justify-center text-on-surface-variant px-3 py-1 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="font-label-sm text-label-sm">More</span>
+</div>
+</nav>
+</div>
+<script>
+        // Micro-interaction for lock state
+        document.querySelector('.material-symbols-outlined[style*="lock"]').parentElement.addEventListener('click', function() {
+            const span = this.querySelector('.material-symbols-outlined');
+            const label = this.querySelector('span:last-child');
+            
+            if (span.innerText === 'lock') {
+                span.innerText = 'lock_open';
+                label.innerText = 'Unlocked';
+                this.classList.remove('bg-surface-container-low');
+                this.classList.add('bg-error-container');
+                label.classList.add('text-on-error-container');
+            } else {
+                span.innerText = 'lock';
+                label.innerText = 'Locked';
+                this.classList.add('bg-surface-container-low');
+                this.classList.remove('bg-error-container');
+                label.classList.remove('text-on-error-container');
+            }
+        });
+    </script>
+</body></html>
